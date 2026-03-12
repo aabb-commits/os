@@ -108,8 +108,6 @@
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
     }
 
     /* 썸네일: padding-top 트릭으로 3:4 비율 완전 고정 */
@@ -119,6 +117,7 @@
       padding-top: 133.333%;
       background: #111;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .card-thumb img {
@@ -356,7 +355,11 @@
 
   function driveImgUrl(link) {
     if (!link || link.trim() === '' || link.trim() === '-') return null;
-    const m = link.match(/\/d\/([\w-]+)/);
+    // /d/FILE_ID/ 형태
+    let m = link.match(/\/d\/([\w-]+)/);
+    if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
+    // open?id=FILE_ID 형태
+    m = link.match(/[?&]id=([\w-]+)/);
     if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
     return null;
   }
