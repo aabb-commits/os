@@ -41,19 +41,8 @@
       z-index: 100;
     }
 
-    .site-title {
-      font-size: 0.92rem;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .site-title em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--mid);
-      text-transform: lowercase;
-    }
+    .site-title { font-size: 0.92rem; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; }
+    .site-title em { font-style: italic; font-weight: 300; color: var(--mid); text-transform: lowercase; }
 
     nav { display: flex; gap: 2rem; font-size: 0.8rem; }
     nav a { color: var(--faint); text-decoration: none; transition: color 0.15s; letter-spacing: 0.03em; }
@@ -70,7 +59,6 @@
     }
 
     .count { font-size: 0.74rem; color: var(--faint); letter-spacing: 0.05em; min-width: 70px; }
-
     .filters { display: flex; }
 
     .filter-btn {
@@ -237,7 +225,7 @@
     }
     .modal-backdrop.open .modal { transform: translateY(0); }
 
-    .modal-cover { background: #111; min-height: 300px; }
+    .modal-cover { background: #111; min-height: 300px; overflow: hidden; }
     .modal-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .modal-body {
@@ -247,28 +235,9 @@
       border-left: 1px solid var(--rule);
     }
 
-    .modal-id {
-      font-size: 0.66rem;
-      color: var(--faint);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.9rem;
-    }
-
-    .modal-title {
-      font-size: 0.95rem;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      line-height: 1.45;
-      margin-bottom: 0.15rem;
-    }
-
-    .modal-title-sub {
-      font-size: 0.78rem;
-      font-style: italic;
-      color: var(--mid);
-      margin-bottom: 1.4rem;
-    }
+    .modal-id { font-size: 0.66rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.9rem; }
+    .modal-title { font-size: 0.95rem; font-weight: 400; letter-spacing: 0.01em; line-height: 1.45; margin-bottom: 0.15rem; }
+    .modal-title-sub { font-size: 0.78rem; font-style: italic; color: var(--mid); margin-bottom: 1.4rem; }
 
     .modal-meta {
       display: grid;
@@ -318,7 +287,7 @@
       .modal-cover { min-height: 200px; }
       .modal-body { border-left: none; border-top: 1px solid var(--rule); }
       header { padding: 0 1.2rem; }
-      .toolbar { padding: 0 1.2rem; gap: 1rem; }
+      .toolbar { padding: 0 1.2rem; }
     }
   </style>
 </head>
@@ -365,30 +334,51 @@
 </div>
 
 <script>
+  // ── CONFIG ───────────────────────────────────────────────
   const SHEET_ID  = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
-  let allBooks = [], activeYear = 'all', query = '';
+  // 이미지는 GitHub 같은 폴더의 images/ 에 {ID}_00.png 형식으로 저장
+  // 예: images/24-0302_00.png
+  const IMG_BASE = 'images/';
+  const IMG_SUFFIX = '_00.png';
 
+  let allBooks   = [];
+  let activeYear = 'all';
+  let query      = '';
+
+  // ── INIT ─────────────────────────────────────────────────
+  async function init() {
+    allBooks = await fetchBooks();
+    render();
+  }
+
+  // ── FETCH SHEET ──────────────────────────────────────────
   async function fetchBooks() {
     try {
       const res = await fetch(SHEET_URL);
       if (!res.ok) throw new Error();
-      allBooks = parseCSV(await res.text());
-      render();
+      return parseCSV(await res.text());
     } catch {
       document.getElementById('grid').innerHTML =
-        '<div class="state-msg">스프레드시트 공유 설정을 확인해 주세요.</div>';
+        '<div class="state-msg">스프레드시트를 불러오지 못했습니다.</div>';
+      return [];
     }
   }
 
+  // ── CSV PARSE ────────────────────────────────────────────
   function parseCSV(csv) {
     return csv.split('\n').slice(1).map(line => {
       const c = splitLine(line);
       if (!c[0] || !c[0].trim()) return null;
-      return { id:c[0], titleKo:c[1], titleEn:c[2], authorKo:c[3], authorEn:c[4],
-               pubKo:c[5], pubEn:c[6], year:c[7], pages:c[8], size:c[9],
-               print:c[10], binding:c[11], desc:c[12], isbn:c[13] };
+      return {
+        id: c[0].trim(), titleKo: c[1]||'', titleEn: c[2]||'',
+        authorKo: c[3]||'', authorEn: c[4]||'',
+        pubKo: c[5]||'', pubEn: c[6]||'',
+        year: c[7]||'', pages: c[8]||'', size: c[9]||'',
+        print: c[10]||'', binding: c[11]||'',
+        desc: c[12]||'', isbn: c[13]||'',
+      };
     }).filter(Boolean);
   }
 
@@ -398,26 +388,37 @@
       const ch = line[i];
       if (ch === '"') { if (inQ && line[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
       else if (ch===',' && !inQ) { res.push(cur.trim()); cur=''; }
-      else cur+=ch;
+      else cur += ch;
     }
     res.push(cur.trim()); return res;
   }
 
+  // ── IMAGE URL HELPER ─────────────────────────────────────
+  // ID가 있으면 images/{ID}_00.png 경로로 자동 매칭
+  // 이미지 없으면 검정 placeholder 유지
+  function getImgUrl(id) {
+    if (!id) return null;
+    return `${IMG_BASE}${id}${IMG_SUFFIX}`;
+  }
+
+  function thumbHtml(id) {
+    const url = getImgUrl(id);
+    return `<img src="${url}" alt="" loading="lazy"
+      onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
+  }
+
+  // ── FILTER ───────────────────────────────────────────────
   function filtered() {
     return allBooks.filter(b => {
       const yOk = activeYear === 'all' || b.year === activeYear;
       const q = query.toLowerCase();
-      const qOk = !q || [b.titleKo,b.titleEn,b.authorKo,b.authorEn,b.pubKo,b.pubEn]
+      const qOk = !q || [b.titleKo, b.titleEn, b.authorKo, b.authorEn, b.pubKo, b.pubEn]
         .some(s => s.toLowerCase().includes(q));
       return yOk && qOk;
     });
   }
 
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
+  // ── RENDER ───────────────────────────────────────────────
   function render() {
     const books = filtered();
     document.getElementById('count').textContent = books.length + ' titles';
@@ -430,7 +431,7 @@
       const author = b.authorKo || b.authorEn;
       return `<div class="card" data-index="${allBooks.indexOf(b)}">
         <div class="card-thumb">
-          <div class="card-placeholder"></div>
+          ${thumbHtml(b.id, true)}
           <div class="card-overlay">
             <div class="overlay-title">${esc(main)}${sub?'<br><span style="opacity:.5;font-style:italic">'+esc(sub)+'</span>':''}</div>
             <div class="overlay-author">${esc(author)}</div>
@@ -439,7 +440,7 @@
         <div class="card-info">
           <div class="info-author">${esc(author)}</div>
           <div class="info-title">${esc(main)}</div>
-          ${b.year?`<div class="info-year">${esc(b.year)}</div>`:''}
+          ${b.year ? `<div class="info-year">${esc(b.year)}</div>` : ''}
         </div>
       </div>`;
     }).join('');
@@ -448,30 +449,35 @@
       c.addEventListener('click', () => openModal(+c.dataset.index)));
   }
 
+  // ── MODAL ────────────────────────────────────────────────
   function openModal(i) {
     const b = allBooks[i];
     const main = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
     const sub  = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
-    document.getElementById('modal-id').textContent       = b.id;
-    document.getElementById('modal-title').textContent    = main;
+
+    document.getElementById('modal-id').textContent        = b.id;
+    document.getElementById('modal-title').textContent     = main;
     document.getElementById('modal-title-sub').textContent = sub;
-    document.getElementById('modal-desc').textContent     = b.desc;
-    document.getElementById('modal-cover').innerHTML =
-      '<div class="card-placeholder" style="width:100%;height:100%;min-height:300px"></div>';
+    document.getElementById('modal-desc').textContent      = b.desc;
+
+    const url = getImgUrl(b.id);
+    document.getElementById('modal-cover').innerHTML = url
+      ? `<img src="${url}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`
+      : `<div class="card-placeholder" style="width:100%;height:100%;min-height:300px"></div>`;
 
     const rows = [
       ['author',    b.authorKo || b.authorEn],
       ['publisher', b.pubKo || b.pubEn],
       ['year',      b.year],
-      ['pages',     b.pages ? b.pages+'p' : ''],
+      ['pages',     b.pages ? b.pages + 'p' : ''],
       ['size',      b.size],
       ['print',     b.print],
       ['binding',   b.binding],
-      ['isbn',      b.isbn && b.isbn!=='-' ? b.isbn : ''],
-    ].filter(([,v]) => v);
+      ['isbn',      b.isbn && b.isbn !== '-' ? b.isbn : ''],
+    ].filter(([, v]) => v);
 
     document.getElementById('modal-meta').innerHTML = rows
-      .map(([l,v]) => `<span class="meta-label">${esc(l)}</span><span class="meta-value">${esc(v)}</span>`)
+      .map(([l, v]) => `<span class="meta-label">${esc(l)}</span><span class="meta-value">${esc(v)}</span>`)
       .join('');
 
     document.getElementById('modal').classList.add('open');
@@ -487,7 +493,7 @@
   document.getElementById('modal').addEventListener('click', e => {
     if (e.target === document.getElementById('modal')) closeModal();
   });
-  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => {
@@ -502,7 +508,13 @@
     query = e.target.value; render();
   });
 
-  fetchBooks();
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  init();
+
 </script>
 </body>
 </html>
