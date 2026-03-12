@@ -6,33 +6,34 @@
   <title>OS library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f5f3ef;
-      --ink: #1a1814;
-      --muted: #8a8680;
-      --rule: #d4d0c8;
-      --accent: #c8b89a;
+      --bg: #ffffff;
+      --ink: #111111;
+      --mid: #555555;
+      --faint: #aaaaaa;
+      --rule: #e0e0e0;
     }
 
-    html { font-size: 15px; }
+    html { font-size: 13px; }
 
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Noto Serif KR', 'EB Garamond', serif;
+      font-family: 'DM Mono', 'Courier New', monospace;
       min-height: 100vh;
     }
 
-    /* ── HEADER ── */
+    /* HEADER */
     header {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      padding: 2rem 2.4rem 1.4rem;
+      padding: 0 2rem;
+      height: 48px;
       border-bottom: 1px solid var(--rule);
       position: sticky;
       top: 0;
@@ -41,201 +42,176 @@
     }
 
     .site-title {
-      font-family: 'EB Garamond', serif;
-      font-size: 1.25rem;
+      font-size: 0.92rem;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .site-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--mid);
       text-transform: lowercase;
     }
 
-    .site-title span {
-      font-style: italic;
-      color: var(--muted);
-    }
-
-    nav {
-      display: flex;
-      gap: 2rem;
-      font-family: 'EB Garamond', serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
+    nav { display: flex; gap: 2rem; font-size: 0.8rem; }
+    nav a { color: var(--faint); text-decoration: none; transition: color 0.15s; letter-spacing: 0.03em; }
     nav a:hover, nav a.active { color: var(--ink); }
 
-    /* ── FILTER / STATS BAR ── */
-    .bar {
+    /* TOOLBAR */
+    .toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.9rem 2.4rem;
+      padding: 0 2rem;
+      height: 38px;
       border-bottom: 1px solid var(--rule);
-      gap: 1rem;
-      flex-wrap: wrap;
     }
 
-    .count {
-      font-family: 'EB Garamond', serif;
-      font-size: 0.85rem;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
+    .count { font-size: 0.74rem; color: var(--faint); letter-spacing: 0.05em; min-width: 70px; }
 
-    .filters {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
+    .filters { display: flex; }
 
     .filter-btn {
       background: none;
-      border: 1px solid var(--rule);
-      color: var(--muted);
-      font-family: 'EB Garamond', serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.05em;
-      padding: 0.3rem 0.9rem;
+      border: none;
+      border-right: 1px solid var(--rule);
+      color: var(--faint);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.74rem;
+      letter-spacing: 0.04em;
+      padding: 0 1rem;
+      height: 38px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
-
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: var(--bg);
-    }
-
-    .search-wrap {
-      position: relative;
-    }
+    .filter-btn:first-child { border-left: 1px solid var(--rule); }
+    .filter-btn:hover { color: var(--ink); }
+    .filter-btn.active { color: var(--bg); background: var(--ink); }
 
     #search {
       background: none;
       border: none;
       border-bottom: 1px solid var(--rule);
       color: var(--ink);
-      font-family: 'EB Garamond', serif;
-      font-size: 0.88rem;
-      padding: 0.2rem 0.5rem;
-      width: 180px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.74rem;
+      letter-spacing: 0.03em;
+      padding: 0.2rem 0.3rem;
+      width: 150px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s;
     }
-
-    #search::placeholder { color: var(--muted); }
+    #search::placeholder { color: var(--faint); }
     #search:focus { border-color: var(--ink); }
 
-    /* ── GRID ── */
+    /* GRID */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 0;
+      grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--rule);
+    }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* CARD */
+    .card {
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ── CARD ── */
-    .card {
+    .card-thumb {
       position: relative;
       aspect-ratio: 3/4;
       overflow: hidden;
-      cursor: pointer;
-      border-right: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
+      background: #111;
     }
 
-    .card-img {
-      width: 100%;
-      height: 100%;
-      background: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
     }
 
-    .card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+    .card-placeholder { width: 100%; height: 100%; background: #111; }
 
-    .card-placeholder {
-      width: 100%;
-      height: 100%;
-      background: var(--ink);
-    }
-
-    /* hover overlay */
     .card-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(10, 9, 8, 0.72);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
+      align-items: center;
       padding: 1.4rem;
+      text-align: center;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.22s ease;
     }
 
     .card:hover .card-overlay { opacity: 1; }
-    .card:hover .card-img img { transform: scale(1.04); }
+    .card:hover .card-thumb img { transform: scale(1.04); }
 
-    .card-title-ko {
+    .overlay-title {
       color: #fff;
-      font-family: 'Noto Serif KR', serif;
-      font-size: 0.88rem;
-      font-weight: 400;
-      line-height: 1.4;
-      margin-bottom: 0.25rem;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      margin-bottom: 0.55rem;
+      letter-spacing: 0.01em;
     }
 
-    .card-title-en {
-      color: rgba(255,255,255,0.6);
-      font-family: 'EB Garamond', serif;
-      font-size: 0.78rem;
-      font-style: italic;
-      line-height: 1.3;
-      margin-bottom: 0.6rem;
-    }
-
-    .card-author {
-      color: rgba(255,255,255,0.75);
-      font-family: 'EB Garamond', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-    }
-
-    .card-year {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      font-family: 'EB Garamond', serif;
-      font-size: 0.72rem;
+    .overlay-author {
       color: rgba(255,255,255,0.5);
-      letter-spacing: 0.06em;
-      opacity: 0;
-      transition: opacity 0.3s;
+      font-size: 0.7rem;
+      font-style: italic;
+      letter-spacing: 0.03em;
     }
 
-    .card:hover .card-year { opacity: 1; }
+    .card-info {
+      padding: 0.7rem 0.85rem 0.8rem;
+      border-top: 1px solid var(--rule);
+    }
 
-    /* ── MODAL ── */
+    .info-author {
+      font-size: 0.68rem;
+      color: var(--faint);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.18rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .info-title {
+      font-size: 0.76rem;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .info-year {
+      font-size: 0.64rem;
+      color: var(--faint);
+      margin-top: 0.28rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(10, 9, 8, 0.55);
-      backdrop-filter: blur(3px);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       z-index: 200;
       display: flex;
       align-items: center;
@@ -243,141 +219,113 @@
       padding: 2rem;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.22s;
     }
-
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
 
     .modal {
       background: var(--bg);
-      max-width: 680px;
+      max-width: 700px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
       display: grid;
       grid-template-columns: 220px 1fr;
-      transform: translateY(16px);
-      transition: transform 0.3s;
+      border: 1px solid var(--rule);
+      transform: translateY(10px);
+      transition: transform 0.22s;
     }
-
     .modal-backdrop.open .modal { transform: translateY(0); }
 
-    .modal-cover {
-      background: var(--ink);
-      aspect-ratio: 3/4;
-      width: 220px;
-      min-height: 280px;
-    }
-
-    .modal-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .modal-cover { background: #111; min-height: 300px; }
+    .modal-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .modal-body {
-      padding: 2rem 1.8rem;
+      padding: 1.8rem;
       display: flex;
       flex-direction: column;
+      border-left: 1px solid var(--rule);
     }
 
     .modal-id {
-      font-family: 'EB Garamond', serif;
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.66rem;
+      color: var(--faint);
       letter-spacing: 0.1em;
-      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
     }
 
-    .modal-title-ko {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 1.15rem;
-      font-weight: 500;
-      line-height: 1.4;
-      margin-bottom: 0.2rem;
+    .modal-title {
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1.45;
+      margin-bottom: 0.15rem;
     }
 
-    .modal-title-en {
-      font-family: 'EB Garamond', serif;
-      font-size: 1rem;
+    .modal-title-sub {
+      font-size: 0.78rem;
       font-style: italic;
-      color: var(--muted);
-      margin-bottom: 1.2rem;
+      color: var(--mid);
+      margin-bottom: 1.4rem;
     }
 
     .modal-meta {
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.3rem 1rem;
-      font-family: 'EB Garamond', serif;
-      font-size: 0.85rem;
-      margin-bottom: 1.2rem;
+      grid-template-columns: 76px 1fr;
+      gap: 0.4rem 0.7rem;
+      font-size: 0.72rem;
+      margin-bottom: 1.4rem;
     }
-
-    .meta-label {
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-
+    .meta-label { color: var(--faint); letter-spacing: 0.05em; }
     .meta-value { color: var(--ink); }
 
     .modal-desc {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 0.82rem;
-      line-height: 1.8;
-      color: #3a3830;
+      font-size: 0.72rem;
+      line-height: 1.9;
+      color: var(--mid);
       border-top: 1px solid var(--rule);
-      padding-top: 1rem;
-      margin-top: auto;
-      flex: 1;
+      padding-top: 1.1rem;
     }
 
     .modal-close {
       position: absolute;
-      top: 1.2rem;
-      right: 1.2rem;
-      background: none;
-      border: none;
-      font-family: 'EB Garamond', serif;
-      font-size: 1.1rem;
-      color: var(--muted);
+      top: 0.85rem;
+      right: 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      color: var(--mid);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.22rem 0.55rem;
       cursor: pointer;
-      padding: 0.2rem 0.5rem;
-      transition: color 0.2s;
+      letter-spacing: 0.06em;
+      transition: all 0.15s;
     }
+    .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
-    .modal-close:hover { color: var(--ink); }
-
-    /* ── EMPTY / LOADING ── */
     .state-msg {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 6rem 2rem;
-      font-family: 'EB Garamond', serif;
-      font-size: 1rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
+      padding: 8rem 2rem;
+      font-size: 0.76rem;
+      color: var(--faint);
+      letter-spacing: 0.06em;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 580px) {
       .modal { grid-template-columns: 1fr; }
-      .modal-cover { width: 100%; aspect-ratio: 3/2; min-height: unset; }
-      nav { gap: 1rem; }
-      header { padding: 1.2rem 1.2rem 1rem; }
-      .bar { padding: 0.7rem 1.2rem; }
+      .modal-cover { min-height: 200px; }
+      .modal-body { border-left: none; border-top: 1px solid var(--rule); }
+      header { padding: 0 1.2rem; }
+      .toolbar { padding: 0 1.2rem; gap: 1rem; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="site-title">OS <span>library</span></div>
+  <div class="site-title">OS <em>library</em></div>
   <nav>
     <a href="#" class="active">archive</a>
     <a href="#">news</a>
@@ -386,194 +334,147 @@
   </nav>
 </header>
 
-<div class="bar">
-  <span class="count" id="count">loading…</span>
+<div class="toolbar">
+  <span class="count" id="count">—</span>
   <div class="filters">
     <button class="filter-btn active" data-year="all">all</button>
-    <button class="filter-btn" data-year="2024">2024</button>
-    <button class="filter-btn" data-year="2025">2025</button>
     <button class="filter-btn" data-year="2026">2026</button>
+    <button class="filter-btn" data-year="2025">2025</button>
+    <button class="filter-btn" data-year="2024">2024</button>
     <button class="filter-btn" data-year="2023">2023</button>
   </div>
-  <div class="search-wrap">
-    <input type="search" id="search" placeholder="search…" autocomplete="off" />
-  </div>
+  <input type="search" id="search" placeholder="search" autocomplete="off" />
 </div>
 
 <main class="grid" id="grid">
-  <div class="state-msg">loading collection…</div>
+  <div class="state-msg">loading…</div>
 </main>
 
-<!-- MODAL -->
 <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
-  <div class="modal" id="modal-inner">
-    <div class="modal-cover" id="modal-cover">
-      <div class="card-placeholder"></div>
-    </div>
+  <div class="modal">
+    <div class="modal-cover" id="modal-cover"><div class="card-placeholder"></div></div>
     <div class="modal-body">
       <div class="modal-id" id="modal-id"></div>
-      <div class="modal-title-ko" id="modal-title-ko"></div>
-      <div class="modal-title-en" id="modal-title-en"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-title-sub" id="modal-title-sub"></div>
       <div class="modal-meta" id="modal-meta"></div>
       <div class="modal-desc" id="modal-desc"></div>
     </div>
   </div>
-  <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+  <button class="modal-close" id="modal-close">ESC</button>
 </div>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────
-  const SHEET_ID = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
+  const SHEET_ID  = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
-  // ── STATE ────────────────────────────────────────────────
-  let allBooks = [];
-  let activeYear = 'all';
-  let query = '';
+  let allBooks = [], activeYear = 'all', query = '';
 
-  // ── FETCH & PARSE CSV ────────────────────────────────────
   async function fetchBooks() {
     try {
       const res = await fetch(SHEET_URL);
-      if (!res.ok) throw new Error('fetch failed');
-      const csv = await res.text();
-      allBooks = parseCSV(csv);
+      if (!res.ok) throw new Error();
+      allBooks = parseCSV(await res.text());
       render();
-    } catch (e) {
+    } catch {
       document.getElementById('grid').innerHTML =
-        '<div class="state-msg">데이터를 불러오지 못했습니다.<br>스프레드시트 공유 설정을 확인해 주세요.</div>';
-      document.getElementById('count').textContent = '';
+        '<div class="state-msg">스프레드시트 공유 설정을 확인해 주세요.</div>';
     }
   }
 
   function parseCSV(csv) {
-    const lines = csv.split('\n');
-    // row 0 = header (A–P): ID,제목,Title,저자/아티스트,Author/Artist,출판사,Publisher,출판연도,쪽수,판형,인쇄방식,제본방식,책설명,ISBN,연락처,비고
-    const books = [];
-    for (let i = 1; i < lines.length; i++) {
-      const cols = splitCSVLine(lines[i]);
-      if (!cols[0] || !cols[0].trim()) continue; // skip empty rows
-      books.push({
-        id:        cols[0]  || '',
-        titleKo:   cols[1]  || '',
-        titleEn:   cols[2]  || '',
-        authorKo:  cols[3]  || '',
-        authorEn:  cols[4]  || '',
-        pubKo:     cols[5]  || '',
-        pubEn:     cols[6]  || '',
-        year:      cols[7]  || '',
-        pages:     cols[8]  || '',
-        size:      cols[9]  || '',
-        print:     cols[10] || '',
-        binding:   cols[11] || '',
-        desc:      cols[12] || '',
-        isbn:      cols[13] || '',
-        contact:   cols[14] || '',
-        note:      cols[15] || '',
-      });
-    }
-    return books;
+    return csv.split('\n').slice(1).map(line => {
+      const c = splitLine(line);
+      if (!c[0] || !c[0].trim()) return null;
+      return { id:c[0], titleKo:c[1], titleEn:c[2], authorKo:c[3], authorEn:c[4],
+               pubKo:c[5], pubEn:c[6], year:c[7], pages:c[8], size:c[9],
+               print:c[10], binding:c[11], desc:c[12], isbn:c[13] };
+    }).filter(Boolean);
   }
 
-  function splitCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
+  function splitLine(line) {
+    const res = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const ch = line[i];
-      if (ch === '"') {
-        if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
-        else inQuotes = !inQuotes;
-      } else if (ch === ',' && !inQuotes) {
-        result.push(current.trim());
-        current = '';
-      } else {
-        current += ch;
-      }
+      if (ch === '"') { if (inQ && line[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
+      else if (ch===',' && !inQ) { res.push(cur.trim()); cur=''; }
+      else cur+=ch;
     }
-    result.push(current.trim());
-    return result;
+    res.push(cur.trim()); return res;
   }
 
-  // ── FILTER ───────────────────────────────────────────────
   function filtered() {
     return allBooks.filter(b => {
-      const matchYear = activeYear === 'all' || b.year === activeYear;
+      const yOk = activeYear === 'all' || b.year === activeYear;
       const q = query.toLowerCase();
-      const matchQ = !q || [b.titleKo, b.titleEn, b.authorKo, b.authorEn, b.pubKo, b.pubEn]
+      const qOk = !q || [b.titleKo,b.titleEn,b.authorKo,b.authorEn,b.pubKo,b.pubEn]
         .some(s => s.toLowerCase().includes(q));
-      return matchYear && matchQ;
+      return yOk && qOk;
     });
   }
 
-  // ── RENDER ───────────────────────────────────────────────
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
   function render() {
     const books = filtered();
+    document.getElementById('count').textContent = books.length + ' titles';
     const grid = document.getElementById('grid');
-    const count = document.getElementById('count');
+    if (!books.length) { grid.innerHTML = '<div class="state-msg">no results</div>'; return; }
 
-    count.textContent = `${books.length} titles`;
-
-    if (books.length === 0) {
-      grid.innerHTML = '<div class="state-msg">no results</div>';
-      return;
-    }
-
-    grid.innerHTML = books.map((b, i) => {
-      const displayTitle = b.titleKo && b.titleKo !== '-' ? b.titleKo : b.titleEn;
-      const displayTitleSub = b.titleKo && b.titleKo !== '-' ? b.titleEn : '';
-      const displayAuthor = b.authorKo || b.authorEn;
-      return `
-        <div class="card" data-index="${allBooks.indexOf(b)}"
-             style="animation-delay:${Math.min(i * 0.02, 0.5)}s">
-          <div class="card-img">
-            <div class="card-placeholder"></div>
-          </div>
+    grid.innerHTML = books.map(b => {
+      const main   = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
+      const sub    = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
+      const author = b.authorKo || b.authorEn;
+      return `<div class="card" data-index="${allBooks.indexOf(b)}">
+        <div class="card-thumb">
+          <div class="card-placeholder"></div>
           <div class="card-overlay">
-            <div class="card-title-ko">${escHtml(displayTitle)}</div>
-            ${displayTitleSub ? `<div class="card-title-en">${escHtml(displayTitleSub)}</div>` : ''}
-            <div class="card-author">${escHtml(displayAuthor)}</div>
+            <div class="overlay-title">${esc(main)}${sub?'<br><span style="opacity:.5;font-style:italic">'+esc(sub)+'</span>':''}</div>
+            <div class="overlay-author">${esc(author)}</div>
           </div>
-          ${b.year ? `<div class="card-year">${escHtml(b.year)}</div>` : ''}
-        </div>`;
+        </div>
+        <div class="card-info">
+          <div class="info-author">${esc(author)}</div>
+          <div class="info-title">${esc(main)}</div>
+          ${b.year?`<div class="info-year">${esc(b.year)}</div>`:''}
+        </div>
+      </div>`;
     }).join('');
 
-    grid.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', () => openModal(+card.dataset.index));
-    });
+    grid.querySelectorAll('.card').forEach(c =>
+      c.addEventListener('click', () => openModal(+c.dataset.index)));
   }
 
-  // ── MODAL ────────────────────────────────────────────────
-  function openModal(index) {
-    const b = allBooks[index];
-    const modal = document.getElementById('modal');
-
-    document.getElementById('modal-id').textContent = b.id;
-    document.getElementById('modal-title-ko').textContent =
-      b.titleKo && b.titleKo !== '-' ? b.titleKo : b.titleEn;
-    document.getElementById('modal-title-en').textContent =
-      b.titleKo && b.titleKo !== '-' ? b.titleEn : '';
-    document.getElementById('modal-desc').textContent = b.desc;
-
-    const meta = [];
-    if (b.authorKo || b.authorEn) meta.push(['저자', b.authorKo || b.authorEn]);
-    if (b.pubKo || b.pubEn)      meta.push(['출판사', b.pubKo || b.pubEn]);
-    if (b.year)                  meta.push(['연도', b.year]);
-    if (b.pages)                 meta.push(['쪽수', b.pages + 'p']);
-    if (b.size)                  meta.push(['판형', b.size]);
-    if (b.print)                 meta.push(['인쇄', b.print]);
-    if (b.binding)               meta.push(['제본', b.binding]);
-    if (b.isbn && b.isbn !== '-') meta.push(['ISBN', b.isbn]);
-
-    document.getElementById('modal-meta').innerHTML = meta.map(([l, v]) =>
-      `<span class="meta-label">${escHtml(l)}</span><span class="meta-value">${escHtml(v)}</span>`
-    ).join('');
-
-    // cover placeholder (검정 박스)
+  function openModal(i) {
+    const b = allBooks[i];
+    const main = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
+    const sub  = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
+    document.getElementById('modal-id').textContent       = b.id;
+    document.getElementById('modal-title').textContent    = main;
+    document.getElementById('modal-title-sub').textContent = sub;
+    document.getElementById('modal-desc').textContent     = b.desc;
     document.getElementById('modal-cover').innerHTML =
-      '<div class="card-placeholder" style="width:100%;height:100%;"></div>';
+      '<div class="card-placeholder" style="width:100%;height:100%;min-height:300px"></div>';
 
-    modal.classList.add('open');
+    const rows = [
+      ['author',    b.authorKo || b.authorEn],
+      ['publisher', b.pubKo || b.pubEn],
+      ['year',      b.year],
+      ['pages',     b.pages ? b.pages+'p' : ''],
+      ['size',      b.size],
+      ['print',     b.print],
+      ['binding',   b.binding],
+      ['isbn',      b.isbn && b.isbn!=='-' ? b.isbn : ''],
+    ].filter(([,v]) => v);
+
+    document.getElementById('modal-meta').innerHTML = rows
+      .map(([l,v]) => `<span class="meta-label">${esc(l)}</span><span class="meta-value">${esc(v)}</span>`)
+      .join('');
+
+    document.getElementById('modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
@@ -586,33 +487,21 @@
   document.getElementById('modal').addEventListener('click', e => {
     if (e.target === document.getElementById('modal')) closeModal();
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
-  // ── FILTERS ──────────────────────────────────────────────
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeYear = btn.dataset.year;
       render();
-    });
-  });
+    })
+  );
 
   document.getElementById('search').addEventListener('input', e => {
-    query = e.target.value;
-    render();
+    query = e.target.value; render();
   });
 
-  // ── UTIL ─────────────────────────────────────────────────
-  function escHtml(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  // ── INIT ─────────────────────────────────────────────────
   fetchBooks();
 </script>
 </body>
