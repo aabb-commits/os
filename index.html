@@ -199,7 +199,7 @@
     @media (max-width: 900px)  { :root { --thumb-h: 200px; } }
     @media (max-width: 600px)  { :root { --thumb-h: 150px; } }
 
-    /* MODAL .*/
+    /* MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -379,7 +379,11 @@
       const res = await fetch(SHEET_URL);
       if (!res.ok) throw new Error();
       allBooks = parseCSV(await res.text());
-      allBooks.sort(() => Math.random() - 0.5);
+      // Fisher-Yates shuffle
+      for (let i = allBooks.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allBooks[i], allBooks[j]] = [allBooks[j], allBooks[i]];
+      }
       render();
     } catch {
       document.getElementById('grid').innerHTML =
