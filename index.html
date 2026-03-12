@@ -121,7 +121,10 @@
 
     .card-thumb img {
       width: 100%; height: 100%;
-      object-fit: cover; display: block;
+      object-fit: contain;
+      display: block;
+      padding: 8%;
+      background: #111;
       transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
     }
 
@@ -225,8 +228,8 @@
     }
     .modal-backdrop.open .modal { transform: translateY(0); }
 
-    .modal-cover { background: #111; min-height: 300px; overflow: hidden; }
-    .modal-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-cover { background: #111; min-height: 300px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .modal-cover img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 8%; }
 
     .modal-body {
       padding: 1.8rem;
@@ -404,7 +407,7 @@
   function thumbHtml(id) {
     const url = getImgUrl(id);
     return `<img src="${url}" alt="" loading="lazy"
-      onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
+      onerror="console.warn('img not found:', '${url}'); this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
   }
 
   // ── FILTER ───────────────────────────────────────────────
