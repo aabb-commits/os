@@ -109,13 +109,15 @@
 
     .card-thumb {
       position: relative;
-      aspect-ratio: 3/4;
+      width: 100%;
+      padding-bottom: 133.33%; /* 3:4 비율 */
       overflow: hidden;
       background: #111;
     }
 
-    /* 이미지: 검정 배경 위에 균일한 여백으로 표지 표시 */
     .card-thumb img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -125,8 +127,8 @@
     }
 
     .no-image {
-      width: 100%;
-      height: 100%;
+      position: absolute;
+      inset: 0;
       background: #111;
     }
 
@@ -144,6 +146,7 @@
       text-align: center;
       opacity: 0;
       transition: opacity 0.22s ease;
+      z-index: 1;
     }
 
     .card:hover .card-overlay { opacity: 1; }
@@ -351,7 +354,7 @@
 
   // 책 ID로 이미지 경로 생성: images/{ID}_00.png
   function imgUrl(id) {
-    return `images/${id}_00.png`;
+    return `${id}_00.png`;
   }
 
   async function init() {
