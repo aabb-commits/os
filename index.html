@@ -379,6 +379,7 @@
       const res = await fetch(SHEET_URL);
       if (!res.ok) throw new Error();
       allBooks = parseCSV(await res.text());
+      allBooks.sort(() => Math.random() - 0.5);
       render();
     } catch {
       document.getElementById('grid').innerHTML =
