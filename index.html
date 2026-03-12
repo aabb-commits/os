@@ -406,8 +406,9 @@
 
   function thumbHtml(id) {
     const url = getImgUrl(id);
+    console.log('loading image:', url);
     return `<img src="${url}" alt="" loading="lazy"
-      onerror="console.warn('img not found:', '${url}'); this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
+      onerror="console.warn('not found:', this.src); this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
   }
 
   // ── FILTER ───────────────────────────────────────────────
