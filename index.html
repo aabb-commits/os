@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OS library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f3ef;
+      --ink: #1a1814;
+      --muted: #8a8680;
+      --rule: #d4d0c8;
+      --accent: #c8b89a;
+    }
+
+    html { font-size: 15px; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif KR', 'EB Garamond', serif;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 2rem 2.4rem 1.4rem;
+      border-bottom: 1px solid var(--rule);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .site-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
+    }
+
+    .site-title span {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active { color: var(--ink); }
+
+    /* ── FILTER / STATS BAR ── */
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2.4rem;
+      border-bottom: 1px solid var(--rule);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .count {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      font-family: 'EB Garamond', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--bg);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    #search {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink);
+      font-family: 'EB Garamond', serif;
+      font-size: 0.88rem;
+      padding: 0.2rem 0.5rem;
+      width: 180px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #search::placeholder { color: var(--muted); }
+    #search:focus { border-color: var(--ink); }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0;
+    }
+
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      cursor: pointer;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--ink);
+    }
+
+    /* hover overlay */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 9, 8, 0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.4rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover .card-overlay { opacity: 1; }
+    .card:hover .card-img img { transform: scale(1.04); }
+
+    .card-title-ko {
+      color: #fff;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title-en {
+      color: rgba(255,255,255,0.6);
+      font-family: 'EB Garamond', serif;
+      font-size: 0.78rem;
+      font-style: italic;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-author {
+      color: rgba(255,255,255,0.75);
+      font-family: 'EB Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-year {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover .card-year { opacity: 1; }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 9, 8, 0.55);
+      backdrop-filter: blur(3px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--bg);
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      transform: translateY(16px);
+      transition: transform 0.3s;
+    }
+
+    .modal-backdrop.open .modal { transform: translateY(0); }
+
+    .modal-cover {
+      background: var(--ink);
+      aspect-ratio: 3/4;
+      width: 220px;
+      min-height: 280px;
+    }
+
+    .modal-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-body {
+      padding: 2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-id {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-title-ko {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 0.2rem;
+    }
+
+    .modal-title-en {
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-meta {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.3rem 1rem;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .meta-label {
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .meta-value { color: var(--ink); }
+
+    .modal-desc {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: #3a3830;
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+      margin-top: auto;
+      flex: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover { color: var(--ink); }
+
+    /* ── EMPTY / LOADING ── */
+    .state-msg {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 6rem 2rem;
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .modal { grid-template-columns: 1fr; }
+      .modal-cover { width: 100%; aspect-ratio: 3/2; min-height: unset; }
+      nav { gap: 1rem; }
+      header { padding: 1.2rem 1.2rem 1rem; }
+      .bar { padding: 0.7rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="site-title">OS <span>library</span></div>
+  <nav>
+    <a href="#" class="active">archive</a>
+    <a href="#">news</a>
+    <a href="#">about</a>
+    <a href="#">contact</a>
+  </nav>
+</header>
+
+<div class="bar">
+  <span class="count" id="count">loading…</span>
+  <div class="filters">
+    <button class="filter-btn active" data-year="all">all</button>
+    <button class="filter-btn" data-year="2024">2024</button>
+    <button class="filter-btn" data-year="2025">2025</button>
+    <button class="filter-btn" data-year="2026">2026</button>
+    <button class="filter-btn" data-year="2023">2023</button>
+  </div>
+  <div class="search-wrap">
+    <input type="search" id="search" placeholder="search…" autocomplete="off" />
+  </div>
+</div>
+
+<main class="grid" id="grid">
+  <div class="state-msg">loading collection…</div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-inner">
+    <div class="modal-cover" id="modal-cover">
+      <div class="card-placeholder"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-id" id="modal-id"></div>
+      <div class="modal-title-ko" id="modal-title-ko"></div>
+      <div class="modal-title-en" id="modal-title-en"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+    </div>
+  </div>
+  <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+</div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────
+  const SHEET_ID = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+  // ── STATE ────────────────────────────────────────────────
+  let allBooks = [];
+  let activeYear = 'all';
+  let query = '';
+
+  // ── FETCH & PARSE CSV ────────────────────────────────────
+  async function fetchBooks() {
+    try {
+      const res = await fetch(SHEET_URL);
+      if (!res.ok) throw new Error('fetch failed');
+      const csv = await res.text();
+      allBooks = parseCSV(csv);
+      render();
+    } catch (e) {
+      document.getElementById('grid').innerHTML =
+        '<div class="state-msg">데이터를 불러오지 못했습니다.<br>스프레드시트 공유 설정을 확인해 주세요.</div>';
+      document.getElementById('count').textContent = '';
+    }
+  }
+
+  function parseCSV(csv) {
+    const lines = csv.split('\n');
+    // row 0 = header (A–P): ID,제목,Title,저자/아티스트,Author/Artist,출판사,Publisher,출판연도,쪽수,판형,인쇄방식,제본방식,책설명,ISBN,연락처,비고
+    const books = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = splitCSVLine(lines[i]);
+      if (!cols[0] || !cols[0].trim()) continue; // skip empty rows
+      books.push({
+        id:        cols[0]  || '',
+        titleKo:   cols[1]  || '',
+        titleEn:   cols[2]  || '',
+        authorKo:  cols[3]  || '',
+        authorEn:  cols[4]  || '',
+        pubKo:     cols[5]  || '',
+        pubEn:     cols[6]  || '',
+        year:      cols[7]  || '',
+        pages:     cols[8]  || '',
+        size:      cols[9]  || '',
+        print:     cols[10] || '',
+        binding:   cols[11] || '',
+        desc:      cols[12] || '',
+        isbn:      cols[13] || '',
+        contact:   cols[14] || '',
+        note:      cols[15] || '',
+      });
+    }
+    return books;
+  }
+
+  function splitCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+        else inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  }
+
+  // ── FILTER ───────────────────────────────────────────────
+  function filtered() {
+    return allBooks.filter(b => {
+      const matchYear = activeYear === 'all' || b.year === activeYear;
+      const q = query.toLowerCase();
+      const matchQ = !q || [b.titleKo, b.titleEn, b.authorKo, b.authorEn, b.pubKo, b.pubEn]
+        .some(s => s.toLowerCase().includes(q));
+      return matchYear && matchQ;
+    });
+  }
+
+  // ── RENDER ───────────────────────────────────────────────
+  function render() {
+    const books = filtered();
+    const grid = document.getElementById('grid');
+    const count = document.getElementById('count');
+
+    count.textContent = `${books.length} titles`;
+
+    if (books.length === 0) {
+      grid.innerHTML = '<div class="state-msg">no results</div>';
+      return;
+    }
+
+    grid.innerHTML = books.map((b, i) => {
+      const displayTitle = b.titleKo && b.titleKo !== '-' ? b.titleKo : b.titleEn;
+      const displayTitleSub = b.titleKo && b.titleKo !== '-' ? b.titleEn : '';
+      const displayAuthor = b.authorKo || b.authorEn;
+      return `
+        <div class="card" data-index="${allBooks.indexOf(b)}"
+             style="animation-delay:${Math.min(i * 0.02, 0.5)}s">
+          <div class="card-img">
+            <div class="card-placeholder"></div>
+          </div>
+          <div class="card-overlay">
+            <div class="card-title-ko">${escHtml(displayTitle)}</div>
+            ${displayTitleSub ? `<div class="card-title-en">${escHtml(displayTitleSub)}</div>` : ''}
+            <div class="card-author">${escHtml(displayAuthor)}</div>
+          </div>
+          ${b.year ? `<div class="card-year">${escHtml(b.year)}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    grid.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => openModal(+card.dataset.index));
+    });
+  }
+
+  // ── MODAL ────────────────────────────────────────────────
+  function openModal(index) {
+    const b = allBooks[index];
+    const modal = document.getElementById('modal');
+
+    document.getElementById('modal-id').textContent = b.id;
+    document.getElementById('modal-title-ko').textContent =
+      b.titleKo && b.titleKo !== '-' ? b.titleKo : b.titleEn;
+    document.getElementById('modal-title-en').textContent =
+      b.titleKo && b.titleKo !== '-' ? b.titleEn : '';
+    document.getElementById('modal-desc').textContent = b.desc;
+
+    const meta = [];
+    if (b.authorKo || b.authorEn) meta.push(['저자', b.authorKo || b.authorEn]);
+    if (b.pubKo || b.pubEn)      meta.push(['출판사', b.pubKo || b.pubEn]);
+    if (b.year)                  meta.push(['연도', b.year]);
+    if (b.pages)                 meta.push(['쪽수', b.pages + 'p']);
+    if (b.size)                  meta.push(['판형', b.size]);
+    if (b.print)                 meta.push(['인쇄', b.print]);
+    if (b.binding)               meta.push(['제본', b.binding]);
+    if (b.isbn && b.isbn !== '-') meta.push(['ISBN', b.isbn]);
+
+    document.getElementById('modal-meta').innerHTML = meta.map(([l, v]) =>
+      `<span class="meta-label">${escHtml(l)}</span><span class="meta-value">${escHtml(v)}</span>`
+    ).join('');
+
+    // cover placeholder (검정 박스)
+    document.getElementById('modal-cover').innerHTML =
+      '<div class="card-placeholder" style="width:100%;height:100%;"></div>';
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ── FILTERS ──────────────────────────────────────────────
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeYear = btn.dataset.year;
+      render();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', e => {
+    query = e.target.value;
+    render();
+  });
+
+  // ── UTIL ─────────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // ── INIT ─────────────────────────────────────────────────
+  fetchBooks();
+</script>
+</body>
+</html>
