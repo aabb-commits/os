@@ -27,7 +27,6 @@
       min-height: 100vh;
     }
 
-    /* HEADER */
     header {
       display: flex;
       align-items: center;
@@ -48,7 +47,6 @@
     nav a { color: var(--faint); text-decoration: none; transition: color 0.15s; letter-spacing: 0.03em; }
     nav a:hover, nav a.active { color: var(--ink); }
 
-    /* TOOLBAR */
     .toolbar {
       display: flex;
       align-items: center;
@@ -85,7 +83,6 @@
       color: var(--ink);
       font-family: 'DM Mono', monospace;
       font-size: 0.74rem;
-      letter-spacing: 0.03em;
       padding: 0.2rem 0.3rem;
       width: 150px;
       outline: none;
@@ -94,7 +91,6 @@
     #search::placeholder { color: var(--faint); }
     #search:focus { border-color: var(--ink); }
 
-    /* GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -103,7 +99,6 @@
     @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-    /* CARD */
     .card {
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
@@ -119,16 +114,21 @@
       background: #111;
     }
 
+    /* 이미지: 검정 배경 위에 균일한 여백으로 표지 표시 */
     .card-thumb img {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
-      display: block;
       padding: 8%;
-      background: #111;
+      display: block;
       transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
     }
 
-    .card-placeholder { width: 100%; height: 100%; background: #111; }
+    .no-image {
+      width: 100%;
+      height: 100%;
+      background: #111;
+    }
 
     .card-overlay {
       position: absolute;
@@ -154,14 +154,12 @@
       font-size: 0.8rem;
       line-height: 1.55;
       margin-bottom: 0.55rem;
-      letter-spacing: 0.01em;
     }
 
     .overlay-author {
       color: rgba(255,255,255,0.5);
       font-size: 0.7rem;
       font-style: italic;
-      letter-spacing: 0.03em;
     }
 
     .card-info {
@@ -172,7 +170,6 @@
     .info-author {
       font-size: 0.68rem;
       color: var(--faint);
-      letter-spacing: 0.04em;
       margin-bottom: 0.18rem;
       white-space: nowrap;
       overflow: hidden;
@@ -182,7 +179,6 @@
     .info-title {
       font-size: 0.76rem;
       color: var(--ink);
-      letter-spacing: 0.01em;
       line-height: 1.4;
       white-space: nowrap;
       overflow: hidden;
@@ -193,7 +189,6 @@
       font-size: 0.64rem;
       color: var(--faint);
       margin-top: 0.28rem;
-      letter-spacing: 0.05em;
     }
 
     /* MODAL */
@@ -202,7 +197,6 @@
       inset: 0;
       background: rgba(0,0,0,0.4);
       backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
       z-index: 200;
       display: flex;
       align-items: center;
@@ -228,8 +222,20 @@
     }
     .modal-backdrop.open .modal { transform: translateY(0); }
 
-    .modal-cover { background: #111; min-height: 300px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .modal-cover img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 8%; }
+    .modal-cover {
+      background: #111;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8%;
+      display: block;
+    }
 
     .modal-body {
       padding: 1.8rem;
@@ -239,7 +245,7 @@
     }
 
     .modal-id { font-size: 0.66rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.9rem; }
-    .modal-title { font-size: 0.95rem; font-weight: 400; letter-spacing: 0.01em; line-height: 1.45; margin-bottom: 0.15rem; }
+    .modal-title { font-size: 0.95rem; font-weight: 400; line-height: 1.45; margin-bottom: 0.15rem; }
     .modal-title-sub { font-size: 0.78rem; font-style: italic; color: var(--mid); margin-bottom: 1.4rem; }
 
     .modal-meta {
@@ -271,7 +277,6 @@
       font-size: 0.72rem;
       padding: 0.22rem 0.55rem;
       cursor: pointer;
-      letter-spacing: 0.06em;
       transition: all 0.15s;
     }
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -324,7 +329,7 @@
 
 <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
   <div class="modal">
-    <div class="modal-cover" id="modal-cover"><div class="card-placeholder"></div></div>
+    <div class="modal-cover" id="modal-cover"><div class="no-image"></div></div>
     <div class="modal-body">
       <div class="modal-id" id="modal-id"></div>
       <div class="modal-title" id="modal-title"></div>
@@ -337,50 +342,49 @@
 </div>
 
 <script>
-  // ── CONFIG ───────────────────────────────────────────────
   const SHEET_ID  = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
-
-  // 이미지는 GitHub 같은 폴더의 images/ 에 {ID}_00.png 형식으로 저장
-  // 예: images/24-0302_00.png
-  const IMG_BASE = 'images/';
-  const IMG_SUFFIX = '_00.png';
 
   let allBooks   = [];
   let activeYear = 'all';
   let query      = '';
 
-  // ── INIT ─────────────────────────────────────────────────
-  async function init() {
-    allBooks = await fetchBooks();
-    render();
+  // 책 ID로 이미지 경로 생성: images/{ID}_00.png
+  function imgUrl(id) {
+    return `images/${id}_00.png`;
   }
 
-  // ── FETCH SHEET ──────────────────────────────────────────
-  async function fetchBooks() {
+  async function init() {
     try {
       const res = await fetch(SHEET_URL);
       if (!res.ok) throw new Error();
-      return parseCSV(await res.text());
+      allBooks = parseCSV(await res.text());
+      render();
     } catch {
       document.getElementById('grid').innerHTML =
         '<div class="state-msg">스프레드시트를 불러오지 못했습니다.</div>';
-      return [];
     }
   }
 
-  // ── CSV PARSE ────────────────────────────────────────────
   function parseCSV(csv) {
     return csv.split('\n').slice(1).map(line => {
       const c = splitLine(line);
       if (!c[0] || !c[0].trim()) return null;
       return {
-        id: c[0].trim(), titleKo: c[1]||'', titleEn: c[2]||'',
-        authorKo: c[3]||'', authorEn: c[4]||'',
-        pubKo: c[5]||'', pubEn: c[6]||'',
-        year: c[7]||'', pages: c[8]||'', size: c[9]||'',
-        print: c[10]||'', binding: c[11]||'',
-        desc: c[12]||'', isbn: c[13]||'',
+        id:       c[0].trim(),
+        titleKo:  c[1] || '',
+        titleEn:  c[2] || '',
+        authorKo: c[3] || '',
+        authorEn: c[4] || '',
+        pubKo:    c[5] || '',
+        pubEn:    c[6] || '',
+        year:     c[7] || '',
+        pages:    c[8] || '',
+        size:     c[9] || '',
+        print:    c[10] || '',
+        binding:  c[11] || '',
+        desc:     c[12] || '',
+        isbn:     c[13] || '',
       };
     }).filter(Boolean);
   }
@@ -390,84 +394,82 @@
     for (let i = 0; i < line.length; i++) {
       const ch = line[i];
       if (ch === '"') { if (inQ && line[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
-      else if (ch===',' && !inQ) { res.push(cur.trim()); cur=''; }
+      else if (ch === ',' && !inQ) { res.push(cur.trim()); cur = ''; }
       else cur += ch;
     }
-    res.push(cur.trim()); return res;
+    res.push(cur.trim());
+    return res;
   }
 
-  // ── IMAGE URL HELPER ─────────────────────────────────────
-  // ID가 있으면 images/{ID}_00.png 경로로 자동 매칭
-  // 이미지 없으면 검정 placeholder 유지
-  function getImgUrl(id) {
-    if (!id) return null;
-    return `${IMG_BASE}${id}${IMG_SUFFIX}`;
-  }
-
-  function thumbHtml(id) {
-    const url = getImgUrl(id);
-    console.log('loading image:', url);
-    return `<img src="${url}" alt="" loading="lazy"
-      onerror="console.warn('not found:', this.src); this.replaceWith(Object.assign(document.createElement('div'),{className:'card-placeholder'}))">`;
-  }
-
-  // ── FILTER ───────────────────────────────────────────────
   function filtered() {
     return allBooks.filter(b => {
       const yOk = activeYear === 'all' || b.year === activeYear;
-      const q = query.toLowerCase();
+      const q   = query.toLowerCase();
       const qOk = !q || [b.titleKo, b.titleEn, b.authorKo, b.authorEn, b.pubKo, b.pubEn]
         .some(s => s.toLowerCase().includes(q));
       return yOk && qOk;
     });
   }
 
-  // ── RENDER ───────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
   function render() {
     const books = filtered();
     document.getElementById('count').textContent = books.length + ' titles';
     const grid = document.getElementById('grid');
-    if (!books.length) { grid.innerHTML = '<div class="state-msg">no results</div>'; return; }
+
+    if (!books.length) {
+      grid.innerHTML = '<div class="state-msg">no results</div>';
+      return;
+    }
 
     grid.innerHTML = books.map(b => {
       const main   = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
       const sub    = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
       const author = b.authorKo || b.authorEn;
-      return `<div class="card" data-index="${allBooks.indexOf(b)}">
-        <div class="card-thumb">
-          ${thumbHtml(b.id, true)}
-          <div class="card-overlay">
-            <div class="overlay-title">${esc(main)}${sub?'<br><span style="opacity:.5;font-style:italic">'+esc(sub)+'</span>':''}</div>
-            <div class="overlay-author">${esc(author)}</div>
+      const img    = imgUrl(b.id);
+
+      return `
+        <div class="card" data-index="${allBooks.indexOf(b)}">
+          <div class="card-thumb">
+            <img src="${img}" alt="${esc(main)}"
+              onerror="this.style.display='none'">
+            <div class="card-overlay">
+              <div class="overlay-title">${esc(main)}${sub ? '<br><span style="opacity:.5;font-style:italic">' + esc(sub) + '</span>' : ''}</div>
+              <div class="overlay-author">${esc(author)}</div>
+            </div>
           </div>
-        </div>
-        <div class="card-info">
-          <div class="info-author">${esc(author)}</div>
-          <div class="info-title">${esc(main)}</div>
-          ${b.year ? `<div class="info-year">${esc(b.year)}</div>` : ''}
-        </div>
-      </div>`;
+          <div class="card-info">
+            <div class="info-author">${esc(author)}</div>
+            <div class="info-title">${esc(main)}</div>
+            ${b.year ? `<div class="info-year">${esc(b.year)}</div>` : ''}
+          </div>
+        </div>`;
     }).join('');
 
     grid.querySelectorAll('.card').forEach(c =>
-      c.addEventListener('click', () => openModal(+c.dataset.index)));
+      c.addEventListener('click', () => openModal(+c.dataset.index))
+    );
   }
 
-  // ── MODAL ────────────────────────────────────────────────
   function openModal(i) {
-    const b = allBooks[i];
-    const main = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
-    const sub  = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
+    const b      = allBooks[i];
+    const main   = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
+    const sub    = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
+    const img    = imgUrl(b.id);
 
     document.getElementById('modal-id').textContent        = b.id;
     document.getElementById('modal-title').textContent     = main;
     document.getElementById('modal-title-sub').textContent = sub;
     document.getElementById('modal-desc').textContent      = b.desc;
 
-    const url = getImgUrl(b.id);
-    document.getElementById('modal-cover').innerHTML = url
-      ? `<img src="${url}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">`
-      : `<div class="card-placeholder" style="width:100%;height:100%;min-height:300px"></div>`;
+    document.getElementById('modal-cover').innerHTML =
+      `<img src="${img}" alt="${esc(main)}"
+        style="width:100%;height:100%;object-fit:contain;padding:8%;display:block"
+        onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'no-image',style:'width:100%;height:100%'}))">`;
 
     const rows = [
       ['author',    b.authorKo || b.authorEn],
@@ -509,16 +511,11 @@
   );
 
   document.getElementById('search').addEventListener('input', e => {
-    query = e.target.value; render();
+    query = e.target.value;
+    render();
   });
 
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
   init();
-
 </script>
 </body>
 </html>
