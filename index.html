@@ -16,7 +16,6 @@
       --mid: #555555;
       --faint: #aaaaaa;
       --rule: #e0e0e0;
-      --thumb-h: 260px;
     }
 
     html { font-size: 13px; }
@@ -94,45 +93,46 @@
     #search::placeholder { color: var(--faint); }
     #search:focus { border-color: var(--ink); }
 
-    /* GRID — flex wrap, 높이 고정 */
+    /* GRID — 3열 고정 */
     .grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       border-top: 1px solid var(--rule);
       border-left: 1px solid var(--rule);
-      align-items: flex-start;
     }
+    @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 
     /* CARD */
     .card {
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
     }
 
-    /* 썸네일: 높이 고정, 너비는 이미지 비율에 따라 자동 */
+    /* 썸네일: ::before로 4:3 비율 완전 고정 */
     .card-thumb {
       position: relative;
-      height: var(--thumb-h);
+      width: 100%;
       background: #111;
       overflow: hidden;
-      flex-shrink: 0;
+    }
+
+    .card-thumb::before {
+      content: '';
+      display: block;
+      padding-top: 120%;
     }
 
     .card-thumb img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
       height: 100%;
-      width: auto;
+      object-fit: cover;
+      object-position: center top;
       display: block;
-      object-fit: contain;
-      padding: 6%;
       transition: transform 0.45s ease;
-    }
-
-    /* 이미지 없는 카드: 고정 너비 */
-    .card-thumb.no-img {
-      width: 180px;
     }
 
     /* 호버 오버레이 */
@@ -195,9 +195,7 @@
       margin-top: 0.25rem;
     }
 
-    /* 반응형 썸네일 높이 */
-    @media (max-width: 900px)  { :root { --thumb-h: 200px; } }
-    @media (max-width: 600px)  { :root { --thumb-h: 150px; } }
+
 
     /* MODAL */
     .modal-backdrop {
