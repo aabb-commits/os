@@ -40,10 +40,8 @@
       background: var(--bg);
       z-index: 100;
     }
-
     .site-title { font-size: 0.92rem; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; }
     .site-title em { font-style: italic; font-weight: 300; color: var(--mid); text-transform: lowercase; }
-
     nav { display: flex; gap: 2rem; font-size: 0.8rem; }
     nav a { color: var(--faint); text-decoration: none; transition: color 0.15s; letter-spacing: 0.03em; }
     nav a:hover, nav a.active { color: var(--ink); }
@@ -57,10 +55,8 @@
       height: 38px;
       border-bottom: 1px solid var(--rule);
     }
-
     .count { font-size: 0.74rem; color: var(--faint); letter-spacing: 0.05em; min-width: 70px; }
     .filters { display: flex; }
-
     .filter-btn {
       background: none;
       border: none;
@@ -77,7 +73,6 @@
     .filter-btn:first-child { border-left: 1px solid var(--rule); }
     .filter-btn:hover { color: var(--ink); }
     .filter-btn.active { color: var(--bg); background: var(--ink); }
-
     #search {
       background: none;
       border: none;
@@ -93,38 +88,35 @@
     #search::placeholder { color: var(--faint); }
     #search:focus { border-color: var(--ink); }
 
-    /* GRID — 3열 고정 */
+    /* GRID */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid var(--rule);
+      grid-template-columns: repeat(4, 1fr);
       border-left: 1px solid var(--rule);
+      border-top: 1px solid var(--rule);
     }
-    @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
 
     /* CARD */
     .card {
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
       cursor: pointer;
+      /* 절대로 flex/display 변형 없이 block만 */
+      display: block;
     }
 
-    /* 썸네일: ::before로 4:3 비율 완전 고정 */
-    .card-thumb {
+    /* 이미지 박스: 폭 100%, 높이는 padding-top으로 비율 고정 */
+    .thumb-wrap {
       position: relative;
       width: 100%;
+      padding-top: 125%; /* 4:5 비율 — 원하면 조정 */
       background: #111;
       overflow: hidden;
     }
 
-    .card-thumb::before {
-      content: '';
-      display: block;
-      padding-top: 120%;
-    }
-
-    .card-thumb img {
+    .thumb-wrap img {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
@@ -132,14 +124,14 @@
       object-fit: cover;
       object-position: center top;
       display: block;
-      transition: transform 0.45s ease;
+      transition: transform 0.4s ease;
     }
 
     /* 호버 오버레이 */
-    .card-overlay {
+    .thumb-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.65);
+      background: rgba(0,0,0,0.6);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       display: flex;
@@ -149,34 +141,32 @@
       padding: 1.2rem;
       text-align: center;
       opacity: 0;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.2s ease;
     }
+    .thumb-wrap:hover .thumb-overlay { opacity: 1; }
+    .thumb-wrap:hover img { transform: scale(1.04); }
 
-    .card-thumb:hover .card-overlay { opacity: 1; }
-    .card-thumb:hover img { transform: scale(1.04); }
-
-    .overlay-title {
+    .ov-title {
       color: #fff;
       font-size: 0.78rem;
-      line-height: 1.55;
-      margin-bottom: 0.5rem;
+      line-height: 1.5;
+      margin-bottom: 0.45rem;
     }
-    .overlay-author {
+    .ov-author {
       color: rgba(255,255,255,0.5);
       font-size: 0.68rem;
       font-style: italic;
     }
 
-    /* 카드 하단 텍스트 */
+    /* 카드 텍스트 */
     .card-info {
       padding: 0.6rem 0.75rem 0.7rem;
       border-top: 1px solid var(--rule);
-      min-width: 0;
     }
     .info-author {
       font-size: 0.66rem;
       color: var(--faint);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.12rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -192,10 +182,8 @@
     .info-year {
       font-size: 0.62rem;
       color: var(--faint);
-      margin-top: 0.25rem;
+      margin-top: 0.22rem;
     }
-
-
 
     /* MODAL */
     .modal-backdrop {
@@ -213,7 +201,6 @@
       transition: opacity 0.22s;
     }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
-
     .modal {
       background: var(--bg);
       max-width: 700px;
@@ -225,9 +212,9 @@
       border: 1px solid var(--rule);
       transform: translateY(10px);
       transition: transform 0.22s;
+      position: relative;
     }
     .modal-backdrop.open .modal { transform: translateY(0); }
-
     .modal-cover {
       background: #111;
       aspect-ratio: 3 / 4;
@@ -242,12 +229,6 @@
       object-fit: contain;
       padding: 8%;
     }
-    .modal-cover .no-image {
-      position: absolute;
-      inset: 0;
-      background: #111;
-    }
-
     .modal-body {
       padding: 1.8rem;
       display: flex;
@@ -257,7 +238,6 @@
     .modal-id { font-size: 0.66rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.9rem; }
     .modal-title { font-size: 0.95rem; font-weight: 400; line-height: 1.45; margin-bottom: 0.15rem; }
     .modal-title-sub { font-size: 0.78rem; font-style: italic; color: var(--mid); margin-bottom: 1.4rem; }
-
     .modal-meta {
       display: grid;
       grid-template-columns: 76px 1fr;
@@ -267,7 +247,6 @@
     }
     .meta-label { color: var(--faint); letter-spacing: 0.05em; }
     .meta-value { color: var(--ink); }
-
     .modal-desc {
       font-size: 0.72rem;
       line-height: 1.9;
@@ -275,7 +254,6 @@
       border-top: 1px solid var(--rule);
       padding-top: 1.1rem;
     }
-
     .modal-close {
       position: absolute;
       top: 0.85rem;
@@ -292,7 +270,7 @@
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
     .state-msg {
-      width: 100%;
+      grid-column: 1 / -1;
       text-align: center;
       padding: 8rem 2rem;
       font-size: 0.76rem;
@@ -377,7 +355,6 @@
       const res = await fetch(SHEET_URL);
       if (!res.ok) throw new Error();
       allBooks = parseCSV(await res.text());
-      // Fisher-Yates shuffle
       for (let i = allBooks.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [allBooks[i], allBooks[j]] = [allBooks[j], allBooks[i]];
@@ -456,18 +433,13 @@
       const author = b.authorKo || b.authorEn;
       const src    = imgUrl(b);
 
-      const thumbContent = src
-        ? `<img src="${src}" alt="${esc(main)}" onerror="this.parentElement.classList.add('no-img');this.remove();">`
-        : '';
-      const thumbClass = src ? 'card-thumb' : 'card-thumb no-img';
-
       return `
         <div class="card" data-index="${allBooks.indexOf(b)}">
-          <div class="${thumbClass}">
-            ${thumbContent}
-            <div class="card-overlay">
-              <div class="overlay-title">${esc(main)}${sub ? '<br><span style="opacity:.5;font-style:italic">' + esc(sub) + '</span>' : ''}</div>
-              <div class="overlay-author">${esc(author)}</div>
+          <div class="thumb-wrap">
+            ${src ? `<img src="${src}" alt="${esc(main)}" onerror="this.remove()">` : ''}
+            <div class="thumb-overlay">
+              <div class="ov-title">${esc(main)}${sub ? '<br><span style="opacity:.5;font-style:italic">' + esc(sub) + '</span>' : ''}</div>
+              <div class="ov-author">${esc(author)}</div>
             </div>
           </div>
           <div class="card-info">
