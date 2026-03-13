@@ -103,8 +103,9 @@
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
       cursor: pointer;
-      /* 절대로 flex/display 변형 없이 block만 */
       display: block;
+      min-width: 0;   /* grid 아이템이 내용물에 의해 늘어나지 않도록 */
+      overflow: hidden;
     }
 
     /* 이미지 박스: 폭 100%, 높이는 padding-top으로 비율 고정 */
