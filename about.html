@@ -45,7 +45,7 @@
     .about-left {
       padding: 4rem 3rem 4rem 2.5rem;
       border-right: 1px solid var(--rule);
-      display: flex; flex-direction: column; gap: 3rem;
+      display: flex; flex-direction: column; gap: 2rem;
     }
     .about-desc-kr {
       font-size: clamp(0.92rem, 1.3vw, 1.05rem);
@@ -57,7 +57,7 @@
     }
     .contact-block { display: flex; flex-direction: column; gap: 0.5rem; }
     .contact-label {
-      font-size: 0.68rem; color: var(--faint);
+      font-size: 1rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem;
     }
     .contact-row { display: flex; gap: 1.2rem; align-items: baseline; }
@@ -71,14 +71,14 @@
       padding: 4rem 2.5rem 4rem 3rem;
       display: flex; flex-direction: column; justify-content: space-between;
     }
-    .submit-top { display: flex; flex-direction: column; gap: 1.8rem; }
+    .submit-top { display: flex; flex-direction: column; gap: 1rem; }
     .about-section-label {
-      font-size: 0.68rem; color: var(--faint);
+      font-size: 1rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase;
-      margin-bottom: 0rem;
+      margin-bottom: 0;
     }
     .submit-label {
-      font-size: 0.68rem; color: var(--faint);
+      font-size: 1rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase;
     }
     .submit-desc {
@@ -87,8 +87,8 @@
     }
     .submit-desc-en {
       margin-top: 1rem;
-      color: var(--faint);
-      font-style: italic;
+      color: var(--mid);
+      font-style: normal;
     }
     .submit-btn {
       display: inline-block;
@@ -213,7 +213,7 @@
       +'</div>'
       +'<div class="about-right">'
         +'<div class="submit-top">'
-          +'<div class="submit-label">Submit Your Publication</div>'
+          +'<div class="submit-label">OS Archive</div>'
           +(d.submit_kr ? '<p class="submit-desc">'+esc(d.submit_kr)+'</p>' : '')+(d.submit_en ? '<p class="submit-desc submit-desc-en">'+esc(d.submit_en)+'</p>' : '')
         +'</div>'
         +'<a class="submit-btn" href="'+esc(submitLink)+'" target="_blank">Submit Publication &#8599;</a>'
