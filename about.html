@@ -195,7 +195,7 @@
     if(d.phone)     contactHTML+='<div class="contact-row"><span class="contact-key">T</span><span class="contact-val">'+esc(d.phone)+'</span></div>';
     if(d.address_kr) contactHTML+='<div class="contact-row"><span class="contact-key">A</span><span class="contact-val">'+esc(d.address_kr)+'<br><span style="color:var(--faint);font-size:0.82em">'+esc(d.address_en)+'</span></span></div>';
 
-    var submitLink = d.submit_link || 'mailto:aabb@aabb.kr';
+    var submitLink = d.submit_link || 'https://forms.gle/qbcDPzm3bSasXY2G6';
 
     document.getElementById('about-wrap').innerHTML =
       '<div class="about-left">'
@@ -207,10 +207,9 @@
       +'</div>'
       +'<div class="about-right">'
         +'<div class="submit-top">'
-          +'<div class="submit-label">Submit Your Publication</div>'
           +(d.submit_kr ? '<p class="submit-desc">'+esc(d.submit_kr)+'</p>' : '')+(d.submit_en ? '<p class="submit-desc submit-desc-en">'+esc(d.submit_en)+'</p>' : '')
         +'</div>'
-        +'<a class="submit-btn" href="'+esc(submitLink)+'" target="https://forms.gle/qbcDPzm3bSasXY2G6">Submit Publication &#8599;</a>'
+        +'<a class="submit-btn" href="'+esc(submitLink)+'" target="_blank</a>'
       +'</div>';
   }
 
