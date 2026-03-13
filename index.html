@@ -6,7 +6,7 @@
   <title>OS library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,22 +29,41 @@
 
     /* HEADER */
     header {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       padding: 0 2rem;
-      height: 56px;
+      height: 80px;
       border-bottom: 1px solid var(--rule);
       position: sticky;
       top: 0;
       background: var(--bg);
       z-index: 100;
     }
-    .site-title { font-size: 1.05rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-    .site-title em { font-style: normal; font-weight: 300; color: var(--mid); text-transform: lowercase; letter-spacing: 0; }
-    nav { display: flex; gap: 2.5rem; font-size: 0.82rem; letter-spacing: 0.04em; }
-    nav a { color: var(--faint); text-decoration: none; transition: color 0.15s; letter-spacing: 0.03em; }
+    .nav-left { display: flex; gap: 2rem; }
+    .nav-right { display: flex; gap: 2rem; justify-content: flex-end; }
+    nav a {
+      font-family: 'Anton', sans-serif;
+      color: var(--faint);
+      text-decoration: none;
+      transition: color 0.15s;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      line-height: 1;
+    }
     nav a:hover, nav a.active { color: var(--ink); }
+    .site-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-align: center;
+      white-space: nowrap;
+      line-height: 1;
+    }
 
     /* TOOLBAR */
     .toolbar {
@@ -270,6 +289,34 @@
     }
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      line-height: 2;
+      letter-spacing: 0.03em;
+    }
+    footer strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    footer a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+    }
+    footer a:hover { color: #fff; }
+    footer .footer-meta {
+      color: rgba(255,255,255,0.5);
+    }
+
     .state-msg {
       grid-column: 1 / -1;
       text-align: center;
@@ -291,10 +338,13 @@
 <body>
 
 <header>
-  <div class="site-title">OS <em>library</em></div>
-  <nav>
-    <a href="#" class="active">Archive</a>
+  <nav class="nav-left">
     <a href="#">News</a>
+    <a href="#">Seminar</a>
+    <a href="#">Article</a>
+  </nav>
+  <div class="site-title">OS</div>
+  <nav class="nav-right">
     <a href="#">About</a>
     <a href="#">Contact</a>
   </nav>
@@ -316,6 +366,13 @@
   <div class="state-msg">loading…</div>
 </main>
 
+<footer>
+  <strong>OS</strong>
+  <span class="footer-meta">5F, 10, Wausanro21gil, Mapogu, Seoul, KR</span><br>
+  Contact&nbsp;&nbsp;<a href="/cdn-cgi/l/email-protection#422323202002232320206c2930"><span class="__cf_email__" data-cfemail="f392929191b392929191dd9881">[email&#160;protected]</span></a><br>
+  Instagram&nbsp;&nbsp;<a href="https://instagram.com/aabb.os.library" target="_blank">@aabb.os.library</a>
+</footer>
+
 <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-cover" id="modal-cover"><div class="no-image"></div></div>
@@ -330,7 +387,7 @@
   <button class="modal-close" id="modal-close">ESC</button>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const SHEET_ID  = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=996701484`;
 
@@ -504,18 +561,4 @@
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeYear = btn.dataset.year;
-      render();
-    })
-  );
-
-  document.getElementById('search').addEventListener('input', e => {
-    query = e.target.value;
-    render();
-  });
-
-  init();
-</script>
-</body>
-</html>
+      btn.classList.add('a
