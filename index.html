@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OS library</title>
+  <title>OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --bg: #ffffff;
       --ink: #111111;
@@ -17,13 +16,11 @@
       --faint: #aaaaaa;
       --rule: #e0e0e0;
     }
-
     html { font-size: 15px; }
-
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
     }
 
@@ -32,38 +29,38 @@
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      padding: 0 2rem;
-      height: 80px;
+      padding: 0 2.5rem;
+      height: 72px;
       border-bottom: 1px solid var(--rule);
       position: sticky;
       top: 0;
       background: var(--bg);
       z-index: 100;
     }
-    .nav-left { display: flex; gap: 2rem; }
-    .nav-right { display: flex; gap: 2rem; justify-content: flex-end; }
+    .nav-left { display: flex; gap: 2rem; align-items: center; }
+    .nav-right { display: flex; gap: 2rem; align-items: center; justify-content: flex-end; }
     nav a {
-      font-family: 'Anton', sans-serif;
       color: var(--faint);
       text-decoration: none;
       transition: color 0.15s;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-      font-weight: 400;
-      line-height: 1;
-    }
-    nav a:hover, nav a.active { color: var(--ink); }
-    .site-title {
-      font-family: 'Anton', sans-serif;
-      font-size: clamp(4rem, 10vw, 7rem);
-      font-weight: 400;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      text-align: center;
-      white-space: nowrap;
-      line-height: 1;
+      font-size: 0.78rem;
+      font-weight: 400;
     }
+    nav a:hover { color: var(--ink); }
+    .site-title {
+      font-family: 'Public Sans';
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-align: center;
+      line-height: 1;
+      color: var(--ink);
+      text-decoration: none;
+      display: block;
+    }
+    .site-title:hover { color: var(--ink); }
 
     /* TOOLBAR */
     .toolbar {
@@ -98,7 +95,7 @@
       border-bottom: 1px solid var(--rule);
       color: var(--ink);
       font-family: 'Inter', sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.78rem;
       padding: 0.2rem 0.3rem;
       width: 150px;
       outline: none;
@@ -123,19 +120,16 @@
       border-bottom: 1px solid var(--rule);
       cursor: pointer;
       display: block;
-      min-width: 0;   /* grid 아이템이 내용물에 의해 늘어나지 않도록 */
+      min-width: 0;
       overflow: hidden;
     }
-
-    /* 이미지 박스: 폭 100%, 높이는 padding-top으로 비율 고정 */
     .thumb-wrap {
       position: relative;
       width: 100%;
-      padding-top: 125%; /* 4:5 비율 — 원하면 조정 */
+      padding-top: 125%;
       background: #111;
       overflow: hidden;
     }
-
     .thumb-wrap img {
       position: absolute;
       top: 0; left: 0;
@@ -146,8 +140,6 @@
       display: block;
       transition: transform 0.4s ease;
     }
-
-    /* 호버 오버레이 */
     .thumb-overlay {
       position: absolute;
       inset: 0;
@@ -165,170 +157,72 @@
     }
     .thumb-wrap:hover .thumb-overlay { opacity: 1; }
     .thumb-wrap:hover img { transform: scale(1.04); }
+    .ov-title { color: #fff; font-size: 0.78rem; line-height: 1.5; margin-bottom: 0.45rem; }
+    .ov-author { color: rgba(255,255,255,0.5); font-size: 0.68rem; font-style: italic; }
 
-    .ov-title {
-      color: #fff;
-      font-size: 0.78rem;
-      line-height: 1.5;
-      margin-bottom: 0.45rem;
-    }
-    .ov-author {
-      color: rgba(255,255,255,0.5);
-      font-size: 0.68rem;
-      font-style: italic;
-    }
-
-    /* 카드 텍스트 */
-    .card-info {
-      padding: 0.6rem 0.75rem 0.7rem;
-      border-top: 1px solid var(--rule);
-    }
-    .info-author {
-      font-size: 0.72rem;
-      color: var(--faint);
-      margin-bottom: 0.12rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .info-title {
-      font-size: 0.82rem;
-      color: var(--ink);
-      line-height: 1.4;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .info-year {
-      font-size: 0.70rem;
-      color: var(--faint);
-      margin-top: 0.25rem;
-    }
+    .card-info { padding: 0.6rem 0.75rem 0.7rem; border-top: 1px solid var(--rule); }
+    .info-author { font-size: 0.72rem; color: var(--faint); margin-bottom: 0.12rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .info-title { font-size: 0.82rem; color: var(--ink); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .info-year { font-size: 0.70rem; color: var(--faint); margin-top: 0.25rem; }
 
     /* MODAL */
     .modal-backdrop {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.4);
       backdrop-filter: blur(4px);
       z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 2rem;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.22s;
     }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
     .modal {
       background: var(--bg);
-      max-width: 700px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      display: grid;
-      grid-template-columns: 220px 1fr;
+      max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;
+      display: grid; grid-template-columns: 220px 1fr;
       border: 1px solid var(--rule);
-      transform: translateY(10px);
-      transition: transform 0.22s;
+      transform: translateY(10px); transition: transform 0.22s;
       position: relative;
     }
     .modal-backdrop.open .modal { transform: translateY(0); }
-    .modal-cover {
-      background: #111;
-      aspect-ratio: 3 / 4;
-      position: relative;
-      overflow: hidden;
-    }
-    .modal-cover img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 8%;
-    }
-    .modal-body {
-      padding: 1.8rem;
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid var(--rule);
-    }
+    .modal-cover { background: #111; aspect-ratio: 3/4; position: relative; overflow: hidden; }
+    .modal-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 8%; }
+    .modal-body { padding: 1.8rem; display: flex; flex-direction: column; border-left: 1px solid var(--rule); }
     .modal-id { font-size: 0.66rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.9rem; }
     .modal-title { font-size: 0.95rem; font-weight: 400; line-height: 1.45; margin-bottom: 0.15rem; }
     .modal-title-sub { font-size: 0.78rem; font-style: italic; color: var(--mid); margin-bottom: 1.4rem; }
-    .modal-meta {
-      display: grid;
-      grid-template-columns: 76px 1fr;
-      gap: 0.4rem 0.7rem;
-      font-size: 0.72rem;
-      margin-bottom: 1.4rem;
-    }
+    .modal-meta { display: grid; grid-template-columns: 76px 1fr; gap: 0.4rem 0.7rem; font-size: 0.72rem; margin-bottom: 1.4rem; }
     .meta-label { color: var(--faint); letter-spacing: 0.05em; }
     .meta-value { color: var(--ink); }
-    .modal-desc {
-      font-size: 0.72rem;
-      line-height: 1.9;
-      color: var(--mid);
-      border-top: 1px solid var(--rule);
-      padding-top: 1.1rem;
-    }
+    .modal-desc { font-size: 0.72rem; line-height: 1.9; color: var(--mid); border-top: 1px solid var(--rule); padding-top: 1.1rem; }
     .modal-close {
-      position: absolute;
-      top: 0.85rem;
-      right: 0.85rem;
-      background: var(--bg);
-      border: 1px solid var(--rule);
-      color: var(--mid);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.72rem;
-      padding: 0.22rem 0.55rem;
-      cursor: pointer;
-      transition: all 0.15s;
+      position: absolute; top: 0.85rem; right: 0.85rem;
+      background: var(--bg); border: 1px solid var(--rule); color: var(--mid);
+      font-family: 'Inter', sans-serif; font-size: 0.72rem;
+      padding: 0.22rem 0.55rem; cursor: pointer; transition: all 0.15s;
     }
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
+    .state-msg {
+      grid-column: 1 / -1; text-align: center;
+      padding: 8rem 2rem; font-size: 0.76rem; color: var(--faint); letter-spacing: 0.06em;
+    }
 
     /* FOOTER */
     footer {
-      background: var(--ink);
-      color: var(--bg);
-      padding: 2.5rem 2rem;
-      text-align: center;
-      font-size: 0.82rem;
-      line-height: 2;
-      letter-spacing: 0.03em;
+      background: var(--ink); color: var(--bg);
+      padding: 2.5rem 2rem; text-align: center;
+      font-size: 0.82rem; line-height: 2; letter-spacing: 0.03em;
     }
-    footer strong {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    footer a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-    }
+    footer strong { display: block; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
     footer a:hover { color: #fff; }
-    footer .footer-meta {
-      color: rgba(255,255,255,0.5);
-    }
-
-    .state-msg {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 8rem 2rem;
-      font-size: 0.76rem;
-      color: var(--faint);
-      letter-spacing: 0.06em;
-    }
+    footer .footer-meta { color: rgba(255,255,255,0.5); }
 
     @media (max-width: 580px) {
       .modal { grid-template-columns: 1fr; }
-      .modal-cover { aspect-ratio: 3 / 2; }
+      .modal-cover { aspect-ratio: 3/2; }
       .modal-body { border-left: none; border-top: 1px solid var(--rule); }
       header { padding: 0 1.2rem; }
       .toolbar { padding: 0 1.2rem; }
@@ -343,7 +237,7 @@
     <a href="#">Seminar</a>
     <a href="#">Article</a>
   </nav>
-  <div class="site-title">OS</div>
+  <a href="/" class="site-title">OS</a>
   <nav class="nav-right">
     <a href="#">About</a>
     <a href="#">Contact</a>
@@ -369,7 +263,7 @@
 <footer>
   <strong>OS</strong>
   <span class="footer-meta">5F, 10, Wausanro21gil, Mapogu, Seoul, KR</span><br>
-  Contact&nbsp;&nbsp;<a href="/cdn-cgi/l/email-protection#422323202002232320206c2930"><span class="__cf_email__" data-cfemail="f392929191b392929191dd9881">[email&#160;protected]</span></a><br>
+  Contact&nbsp;&nbsp;<a href="mailto:aabb[at]aabb.kr">aabb[at]aabb.kr</a><br>
   Instagram&nbsp;&nbsp;<a href="https://instagram.com/aabb.os.library" target="_blank">@aabb.os.library</a>
 </footer>
 
@@ -387,9 +281,9 @@
   <button class="modal-close" id="modal-close">ESC</button>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   const SHEET_ID  = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=996701484`;
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=996701484';
 
   let allBooks   = [];
   let activeYear = 'all';
@@ -398,9 +292,9 @@
   function driveImgUrl(link) {
     if (!link || link.trim() === '' || link.trim() === '-') return null;
     let m = link.match(/\/d\/([\w-]+)/);
-    if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
+    if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w800';
     m = link.match(/[?&]id=([\w-]+)/);
-    if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w800`;
+    if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w800';
     return null;
   }
 
@@ -411,14 +305,14 @@
   async function init() {
     try {
       const res = await fetch(SHEET_URL);
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error('fetch failed');
       allBooks = parseCSV(await res.text());
       for (let i = allBooks.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [allBooks[i], allBooks[j]] = [allBooks[j], allBooks[i]];
       }
       render();
-    } catch {
+    } catch(e) {
       document.getElementById('grid').innerHTML =
         '<div class="state-msg">스프레드시트를 불러오지 못했습니다.</div>';
     }
@@ -471,43 +365,35 @@
   }
 
   function esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function render() {
     const books = filtered();
     document.getElementById('count').textContent = books.length + ' titles';
     const grid = document.getElementById('grid');
-
     if (!books.length) {
       grid.innerHTML = '<div class="state-msg">no results</div>';
       return;
     }
-
     grid.innerHTML = books.map(b => {
       const main   = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
       const sub    = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
       const author = b.authorKo || b.authorEn;
       const src    = imgUrl(b);
-
-      return `
-        <div class="card" data-index="${allBooks.indexOf(b)}">
-          <div class="thumb-wrap">
-            ${src ? `<img src="${src}" alt="${esc(main)}" onerror="this.remove()">` : ''}
-            <div class="thumb-overlay">
-              <div class="ov-title">${esc(main)}${sub ? '<br><span style="opacity:.5;font-style:italic">' + esc(sub) + '</span>' : ''}</div>
-              <div class="ov-author">${esc(author)}</div>
-            </div>
-          </div>
-          <div class="card-info">
-            <div class="info-author">${esc(author)}</div>
-            <div class="info-title">${esc(main)}</div>
-            ${b.year ? `<div class="info-year">${esc(b.year)}</div>` : ''}
-          </div>
-        </div>`;
+      return '<div class="card" data-index="' + allBooks.indexOf(b) + '">' +
+        '<div class="thumb-wrap">' +
+        (src ? '<img src="' + src + '" alt="' + esc(main) + '" onerror="this.remove()">' : '') +
+        '<div class="thumb-overlay">' +
+        '<div class="ov-title">' + esc(main) + (sub ? '<br><span style="opacity:.5;font-style:italic">' + esc(sub) + '</span>' : '') + '</div>' +
+        '<div class="ov-author">' + esc(author) + '</div>' +
+        '</div></div>' +
+        '<div class="card-info">' +
+        '<div class="info-author">' + esc(author) + '</div>' +
+        '<div class="info-title">' + esc(main) + '</div>' +
+        (b.year ? '<div class="info-year">' + esc(b.year) + '</div>' : '') +
+        '</div></div>';
     }).join('');
-
     grid.querySelectorAll('.card').forEach(c =>
       c.addEventListener('click', () => openModal(+c.dataset.index))
     );
@@ -518,16 +404,13 @@
     const main = (b.titleKo && b.titleKo !== '-') ? b.titleKo : b.titleEn;
     const sub  = (b.titleKo && b.titleKo !== '-') ? b.titleEn : '';
     const src  = imgUrl(b);
-
     document.getElementById('modal-id').textContent        = b.id;
     document.getElementById('modal-title').textContent     = main;
     document.getElementById('modal-title-sub').textContent = sub;
     document.getElementById('modal-desc').textContent      = b.desc;
-
     document.getElementById('modal-cover').innerHTML = src
-      ? `<img src="${src}" alt="${esc(main)}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'no-image'}))">`
-      : `<div class="no-image"></div>`;
-
+      ? '<img src="' + src + '" alt="' + esc(main) + '" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'no-image\'}))">'
+      : '<div class="no-image"></div>';
     const rows = [
       ['author',    b.authorKo || b.authorEn],
       ['publisher', b.pubKo || b.pubEn],
@@ -537,12 +420,10 @@
       ['print',     b.print],
       ['binding',   b.binding],
       ['isbn',      b.isbn && b.isbn !== '-' ? b.isbn : ''],
-    ].filter(([, v]) => v);
-
+    ].filter(function(r){ return r[1]; });
     document.getElementById('modal-meta').innerHTML = rows
-      .map(([l, v]) => `<span class="meta-label">${esc(l)}</span><span class="meta-value">${esc(v)}</span>`)
+      .map(function(r){ return '<span class="meta-label">' + esc(r[0]) + '</span><span class="meta-value">' + esc(r[1]) + '</span>'; })
       .join('');
-
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -553,12 +434,26 @@
   }
 
   document.getElementById('modal-close').addEventListener('click', closeModal);
-  document.getElementById('modal').addEventListener('click', e => {
+  document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === document.getElementById('modal')) closeModal();
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
 
-  document.querySelectorAll('.filter-btn').forEach(btn =>
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('a
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeYear = btn.dataset.year;
+      render();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', function(e) {
+    query = e.target.value;
+    render();
+  });
+
+  init();
+</script>
+</body>
+</html>
