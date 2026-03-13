@@ -165,11 +165,11 @@
   }
 
   function parseKV(csv){
+    var lines=csv.split('\n');
+    var headers=splitLine(lines[0]); // 1행: 헤더
+    var vals=splitLine(lines[1]||''); // 2행: 모든 데이터
     var obj={};
-    csv.split('\n').forEach(function(line){
-      var c=splitLine(line);
-      if(c[0]&&c[0].trim()) obj[c[0].trim()]=c[1]||'';
-    });
+    headers.forEach(function(h,i){ obj[h.trim()]=vals[i]||''; });
     return obj;
   }
 
@@ -178,15 +178,15 @@
   function render(d){
     // 컬럼명 매핑 (스프레드시트 헤더 → 내부 키)
     var d2={
-      desc_kr:    d['desc_kr']    || d['Desc_KR']    || '',
-      desc_en:    d['desc_en']    || d['Desc_EN']    || '',
-      email:      d['email']      || d['Email']      || '',
-      instagram:  d['instagram']  || d['Instagram']  || '',
-      address_kr: d['address_kr'] || d['Address_KR'] || '',
-      address_en: d['address_en'] || d['Address_EN'] || d['address'] || '',
-      submit_kr:  d['submit_kr']  || d['Submission_KR'] || '',
-      submit_en:  d['submit_en']  || d['Submission_EN'] || '',
-      submit_link: d['submit_link'] || d['Submit_Link'] || ''
+      desc_kr:     d['Desc_KR']       || '',
+      desc_en:     d['Desc_EN']       || '',
+      email:       d['email']         || '',
+      instagram:   d['Instagram']     || '',
+      address_kr:  d['Address_KR']    || '',
+      address_en:  d['Address_EN']    || '',
+      submit_kr:   d['Submission_KR'] || '',
+      submit_en:   d['Submission_EN'] || '',
+      submit_link: d['Submit_Link']   || ''
     };
     d=d2;
     var contactHTML='';
