@@ -72,6 +72,11 @@
       display: flex; flex-direction: column; justify-content: space-between;
     }
     .submit-top { display: flex; flex-direction: column; gap: 1.8rem; }
+    .about-section-label {
+      font-size: 0.68rem; color: var(--faint);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0rem;
+    }
     .submit-label {
       font-size: 0.68rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase;
@@ -193,12 +198,13 @@
     if(d.email)     contactHTML+='<div class="contact-row"><span class="contact-key">E</span><span class="contact-val"><a href="mailto:'+esc(d.email)+'">'+esc(d.email)+'</a></span></div>';
     if(d.instagram) contactHTML+='<div class="contact-row"><span class="contact-key">IG</span><span class="contact-val"><a href="https://instagram.com/'+esc(d.instagram.replace('@',''))+'" target="_blank">'+esc(d.instagram)+'</a></span></div>';
     if(d.phone)     contactHTML+='<div class="contact-row"><span class="contact-key">T</span><span class="contact-val">'+esc(d.phone)+'</span></div>';
-    if(d.address_kr) contactHTML+='<div class="contact-row"><span class="contact-key">A</span><span class="contact-val">'+esc(d.address_kr)+'<br><span style="color:var(--faint);font-size:0.82em">'+esc(d.address_en)+'</span></span></div>';
+    if(d.address_kr) contactHTML+='<div class="contact-row"><span class="contact-key">A</span><span class="contact-val">'+esc(d.address_kr)+(d.address_en?'<br>'+esc(d.address_en):'')+'</span></div>';
 
-    var submitLink = d.submit_link || 'https://forms.gle/qbcDPzm3bSasXY2G6';
+    var submitLink = 'https://forms.gle/gKWMpudBKSDzDNHj6';
 
     document.getElementById('about-wrap').innerHTML =
       '<div class="about-left">'
+        +'<div class="about-section-label">OS</div>'
         +'<div>'
           +(d.desc_kr ? '<p class="about-desc-kr">'+esc(d.desc_kr)+'</p>' : '')
           +(d.desc_en ? '<p class="about-desc-en" style="margin-top:1.5rem">'+esc(d.desc_en)+'</p>' : '')
@@ -207,9 +213,10 @@
       +'</div>'
       +'<div class="about-right">'
         +'<div class="submit-top">'
+          +'<div class="submit-label">Submit Your Publication</div>'
           +(d.submit_kr ? '<p class="submit-desc">'+esc(d.submit_kr)+'</p>' : '')+(d.submit_en ? '<p class="submit-desc submit-desc-en">'+esc(d.submit_en)+'</p>' : '')
         +'</div>'
-        +'<a class="submit-btn" href="'+esc(submitLink)+'" target="_blank</a>'
+        +'<a class="submit-btn" href="'+esc(submitLink)+'" target="_blank">Submit Publication &#8599;</a>'
       +'</div>';
   }
 
