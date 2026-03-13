@@ -98,6 +98,41 @@
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
     .state-msg { grid-column: 1 / -1; text-align: center; padding: 8rem 2rem; font-size: 0.76rem; color: var(--faint); letter-spacing: 0.06em; }
 
+    /* CONTACT MODAL */
+    .contact-modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .contact-modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .contact-modal {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      width: 320px;
+      transform: translateY(8px);
+      transition: transform 0.2s;
+    }
+    .contact-modal-backdrop.open .contact-modal { transform: translateY(0); }
+    .contact-modal-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.4rem;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+    .contact-modal-row:last-child { border-bottom: none; }
+    .contact-modal-row:hover { background: var(--ink); color: var(--bg); }
+    .contact-modal-arrow { font-size: 0.8rem; color: var(--faint); }
+    .contact-modal-row:hover .contact-modal-arrow { color: var(--bg); }
+
     footer { background: var(--ink); color: var(--bg); padding: 2.5rem 2rem; text-align: center; font-size: 0.82rem; line-height: 2; letter-spacing: 0.03em; }
     footer strong { display: block; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
     footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
@@ -130,7 +165,7 @@
   <a href="https://aabb-commits.github.io/os/" class="site-title">OS</a>
   <nav class="nav-right">
     <a href="about.html">About</a>
-    <a href="#">Contact</a>
+    <a href="#" id="contact-link">Contact</a>
   </nav>
 </header>
 
@@ -149,6 +184,20 @@
 <main class="grid" id="grid">
   <div class="state-msg">loading&#8230;</div>
 </main>
+
+<div class="contact-modal-backdrop" id="contact-modal">
+  <div class="contact-modal">
+    <a class="contact-modal-row" href="https://maps.app.goo.gl/zo92YtDpSaYs7Nhz7" target="_blank">
+      Google Maps <span class="contact-modal-arrow">&#8599;</span>
+    </a>
+    <a class="contact-modal-row" href="https://naver.me/GoDhhbsS" target="_blank">
+      Naver Map <span class="contact-modal-arrow">&#8599;</span>
+    </a>
+    <a class="contact-modal-row" href="mailto:aabb&#64;aabb.kr">
+      aabb&#64;aabb.kr <span class="contact-modal-arrow">&#8599;</span>
+    </a>
+  </div>
+</div>
 
 <footer>
   <strong>OS</strong>
@@ -314,6 +363,21 @@
     .catch(function(){
       document.getElementById('grid').innerHTML='<div class="state-msg">스프레드시트를 불러오지 못했습니다.</div>';
     });
+  // Contact 모달
+  var cLink = document.getElementById('contact-link');
+  var cModal = document.getElementById('contact-modal');
+  if(cLink && cModal){
+    cLink.addEventListener('click', function(e){
+      e.preventDefault();
+      cModal.classList.add('open');
+    });
+    cModal.addEventListener('click', function(e){
+      if(e.target === cModal) cModal.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Escape') cModal.classList.remove('open');
+    });
+  }
 })();
 </script>
 </body>
