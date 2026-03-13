@@ -45,7 +45,7 @@
     .about-left {
       padding: 4rem 3rem 4rem 2.5rem;
       border-right: 1px solid var(--rule);
-      display: flex; flex-direction: column; gap: 2rem;
+      display: flex; flex-direction: column; gap: 0;
     }
     .about-desc-kr {
       font-size: clamp(0.92rem, 1.3vw, 1.05rem);
@@ -55,12 +55,12 @@
       font-size: clamp(0.92rem, 1.3vw, 1.05rem);
       line-height: 1.9; color: var(--mid); font-weight: 400;
     }
-    .contact-block { display: flex; flex-direction: column; gap: 0.5rem; }
+    .contact-block { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 2.5rem; }
     .contact-label {
       font-size: 1rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem;
     }
-    .contact-row { display: flex; gap: 1.2rem; align-items: baseline; }
+    .contact-row { display: flex; gap: 1.2rem; align-items: baseline; margin-bottom: 0.5rem; }
     .contact-key { font-size: 0.72rem; color: var(--faint); letter-spacing: 0.06em; text-transform: uppercase; min-width: 1.6rem; }
     .contact-val { font-size: 0.88rem; color: var(--ink); }
     .contact-val a { color: var(--ink); text-decoration: none; }
@@ -75,7 +75,7 @@
     .about-section-label {
       font-size: 1rem; color: var(--faint);
       letter-spacing: 0.12em; text-transform: uppercase;
-      margin-bottom: 0;
+      margin-bottom: 1.2rem;
     }
     .submit-label {
       font-size: 1rem; color: var(--faint);
@@ -198,7 +198,7 @@
     if(d.email)     contactHTML+='<div class="contact-row"><span class="contact-key">E</span><span class="contact-val"><a href="mailto:'+esc(d.email)+'">'+esc(d.email)+'</a></span></div>';
     if(d.instagram) contactHTML+='<div class="contact-row"><span class="contact-key">IG</span><span class="contact-val"><a href="https://instagram.com/'+esc(d.instagram.replace('@',''))+'" target="_blank">'+esc(d.instagram)+'</a></span></div>';
     if(d.phone)     contactHTML+='<div class="contact-row"><span class="contact-key">T</span><span class="contact-val">'+esc(d.phone)+'</span></div>';
-    if(d.address_kr) contactHTML+='<div class="contact-row"><span class="contact-key">A</span><span class="contact-val">'+esc(d.address_kr)+(d.address_en?'<br>'+esc(d.address_en):'')+'</span></div>';
+    if(d.address_kr) contactHTML+='<div class="contact-row"><span class="contact-key">A</span><span class="contact-val">'+esc(d.address_kr)+'</span></div>'+(d.address_en?'<div class="contact-row"><span class="contact-key"></span><span class="contact-val">'+esc(d.address_en)+'</span></div>':'');
 
     var submitLink = 'https://forms.gle/gKWMpudBKSDzDNHj6';
 
@@ -207,7 +207,7 @@
         +'<div class="about-section-label">OS</div>'
         +'<div>'
           +(d.desc_kr ? '<p class="about-desc-kr">'+esc(d.desc_kr)+'</p>' : '')
-          +(d.desc_en ? '<p class="about-desc-en" style="margin-top:1.5rem">'+esc(d.desc_en)+'</p>' : '')
+          +(d.desc_en ? '<p class="about-desc-en" style="margin-top:1rem">'+esc(d.desc_en)+'</p>' : '')
         +'</div>'
         +(contactHTML ? '<div class="contact-block"><div class="contact-label">Contact</div>'+contactHTML+'</div>' : '')
       +'</div>'
