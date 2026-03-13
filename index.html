@@ -6,13 +6,13 @@
   <title>OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Arvo:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Arvo:wght@700&family=Funnel+Sans:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --bg: #ffffff; --ink: #111111; --mid: #555555; --faint: #aaaaaa; --rule: #e0e0e0; }
     html { font-size: 15px; }
     body { background: var(--bg); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
- 
+
     header {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -33,12 +33,12 @@
     }
     nav a:hover { color: var(--ink); }
     .site-title {
-      font-family: 'Funnel Sans';
+      font-family: 'Arvo', Georgia, serif;
       font-size: clamp(1.8rem, 3.6vw, 3.2rem); font-weight: 700;
       letter-spacing: 0.01em; text-align: center; line-height: 1;
       color: var(--ink); text-decoration: none; display: block;
     }
- 
+
     .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 40px; border-bottom: 1px solid var(--rule); }
     .count { font-size: 0.78rem; color: var(--faint); letter-spacing: 0.03em; min-width: 70px; }
     .filters { display: flex; }
@@ -57,11 +57,11 @@
     }
     #search::placeholder { color: var(--faint); }
     #search:focus { border-color: var(--ink); }
- 
+
     .grid { display: grid; grid-template-columns: repeat(4, 1fr); border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); }
     @media (max-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
- 
+
     .card { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); cursor: pointer; display: block; min-width: 0; overflow: hidden; }
     .thumb-wrap { position: relative; width: 100%; padding-top: 125%; background: #111; overflow: hidden; }
     .thumb-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 8%; display: block; transition: transform 0.4s ease; }
@@ -79,7 +79,7 @@
     .info-author { font-size: 0.72rem; color: var(--faint); margin-bottom: 0.12rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .info-title { font-size: 0.82rem; color: var(--ink); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .info-year { font-size: 0.70rem; color: var(--faint); margin-top: 0.25rem; }
- 
+
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
     .modal { background: var(--bg); max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 220px 1fr; border: 1px solid var(--rule); transform: translateY(10px); transition: transform 0.22s; position: relative; }
@@ -97,13 +97,13 @@
     .modal-close { position: absolute; top: 0.85rem; right: 0.85rem; background: var(--bg); border: 1px solid var(--rule); color: var(--mid); font-family: 'Inter', sans-serif; font-size: 0.72rem; padding: 0.22rem 0.55rem; cursor: pointer; transition: all 0.15s; }
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
     .state-msg { grid-column: 1 / -1; text-align: center; padding: 8rem 2rem; font-size: 0.76rem; color: var(--faint); letter-spacing: 0.06em; }
- 
+
     footer { background: var(--ink); color: var(--bg); padding: 2.5rem 2rem; text-align: center; font-size: 0.82rem; line-height: 2; letter-spacing: 0.03em; }
     footer strong { display: block; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
     footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
     footer a:hover { color: #fff; }
     footer .footer-meta { color: rgba(255,255,255,0.5); }
- 
+
     @media (max-width: 700px) {
       header { grid-template-columns: 1fr; height: auto; padding: 0.7rem 1.2rem; gap: 0.4rem; justify-items: center; }
       .nav-left { order: 2; justify-content: center; flex-wrap: nowrap; gap: 1rem; }
@@ -120,7 +120,7 @@
   </style>
 </head>
 <body>
- 
+
 <header>
   <nav class="nav-left">
     <a href="#">News</a>
@@ -133,7 +133,7 @@
     <a href="#">Contact</a>
   </nav>
 </header>
- 
+
 <div class="toolbar">
   <span class="count" id="count">&#8212;</span>
   <div class="filters">
@@ -145,18 +145,18 @@
   </div>
   <input type="search" id="search" placeholder="search" autocomplete="off" />
 </div>
- 
+
 <main class="grid" id="grid">
   <div class="state-msg">loading&#8230;</div>
 </main>
- 
+
 <footer>
   <strong>OS</strong>
   <span class="footer-meta">5F, 10, Wausanro21gil, Mapogu, Seoul, KR</span><br>
   Contact&#160;&#160;aabb&#64;aabb.kr<br>
   Instagram&#160;&#160;<a href="https://instagram.com/aabb.os.library" target="_blank">&#64;aabb.os.library</a>
 </footer>
- 
+
 <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-cover" id="modal-cover"></div>
@@ -170,13 +170,13 @@
   </div>
   <button class="modal-close" id="modal-close">ESC</button>
 </div>
- 
+
 <script>
 (function(){
   var SID = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   var URL = 'https://docs.google.com/spreadsheets/d/'+SID+'/export?format=csv&gid=996701484';
   var books=[], year='all', q='';
- 
+
   function thumbUrl(link){
     if(!link||link.trim()===''||link.trim()==='-') return null;
     var m=link.match(/\/d\/([\w-]+)/);
@@ -185,7 +185,7 @@
     if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w800';
     return null;
   }
- 
+
   function splitLine(line){
     var res=[],cur='',inQ=false;
     for(var i=0;i<line.length;i++){
@@ -197,7 +197,7 @@
     res.push(cur.trim());
     return res;
   }
- 
+
   function parseCSV(csv){
     return csv.split('\n').slice(1).map(function(line){
       var c=splitLine(line);
@@ -208,11 +208,11 @@
         binding:c[11]||'',desc:c[12]||'',isbn:c[13]||'',cover:c[17]||''};
     }).filter(Boolean);
   }
- 
+
   function esc(s){
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
- 
+
   function filtered(){
     return books.filter(function(b){
       var yOk=year==='all'||b.year===year;
@@ -222,7 +222,7 @@
       return yOk&&qOk;
     });
   }
- 
+
   function render(){
     var list=filtered();
     document.getElementById('count').textContent=list.length+' titles';
@@ -250,7 +250,7 @@
       c.addEventListener('click',function(){openModal(+c.dataset.index);});
     });
   }
- 
+
   function openModal(i){
     var b=books[i];
     var main=(b.titleKo&&b.titleKo!=='-')?b.titleKo:b.titleEn;
@@ -275,18 +275,18 @@
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow='hidden';
   }
- 
+
   function closeModal(){
     document.getElementById('modal').classList.remove('open');
     document.body.style.overflow='';
   }
- 
+
   document.getElementById('modal-close').addEventListener('click',closeModal);
   document.getElementById('modal').addEventListener('click',function(e){
     if(e.target===document.getElementById('modal')) closeModal();
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape') closeModal();});
- 
+
   document.querySelectorAll('.filter-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
       document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
@@ -295,12 +295,12 @@
       render();
     });
   });
- 
+
   document.getElementById('search').addEventListener('input',function(e){
     q=e.target.value;
     render();
   });
- 
+
   fetch(URL)
     .then(function(r){if(!r.ok) throw 0; return r.text();})
     .then(function(t){
