@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Funnel+Sans:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #000000; --ink: #ffffff; --mid: #555555; --faint: #aaaaaa; --rule: #ffffff; }
+    :root { --bg: #ffffff; --ink: #111111; --mid: #555555; --faint: #aaaaaa; --rule: #e0e0e0; }
     html { font-size: 15px; }
     body { background: var(--bg); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
 
@@ -82,7 +82,7 @@
 
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
-    .modal { background: var(--bg); max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 220px 1fr; border: 1px solid var(--rule); transform: translateY(10px); transition: transform 0.22s; position: relative; }
+    .modal { background: var(--bg); max-width: 1200px; width: 100%; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 440px 1fr; border: 1px solid var(--rule); transform: translateY(10px); transition: transform 0.22s; position: relative; }
     .modal-backdrop.open .modal { transform: translateY(0); }
     .modal-cover { background: #111; aspect-ratio: 3/4; position: relative; overflow: hidden; }
     .modal-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 8%; }
@@ -93,6 +93,18 @@
     .modal-meta { display: grid; grid-template-columns: 76px 1fr; gap: 0.4rem 0.7rem; font-size: 0.72rem; margin-bottom: 1.4rem; }
     .meta-label { color: var(--faint); letter-spacing: 0.05em; }
     .meta-value { color: var(--ink); }
+    .view-detail-btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--ink); color: var(--bg);
+      font-family: 'Anton', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border: 1px solid var(--rule);
+      transition: background 0.15s, color 0.15s;
+      align-self: flex-start;
+    }
+    .view-detail-btn:hover { background: transparent; color: var(--ink); }
     .modal-desc { font-size: 0.72rem; line-height: 1.9; color: var(--mid); border-top: 1px solid var(--rule); padding-top: 1.1rem; }
     .modal-close { position: absolute; top: 0.85rem; right: 0.85rem; background: var(--bg); border: 1px solid var(--rule); color: var(--mid); font-family: 'Inter', sans-serif; font-size: 0.72rem; padding: 0.22rem 0.55rem; cursor: pointer; transition: all 0.15s; }
     .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -193,7 +205,7 @@
     <a class="contact-modal-row" href="https://naver.me/GoDhhbsS" target="_blank">
       Naver Map <span class="contact-modal-arrow">&#8599;</span>
     </a>
-    <a class="contact-modal-row" href="mailto:aabb&#64;aabb.kr">
+    <a class="contact-modal-row" href="/cdn-cgi/l/email-protection#88e9e9eaeaaeabbebcb3e9e9eaeaa6e3fa">
       aabb&#64;aabb.kr <span class="contact-modal-arrow">&#8599;</span>
     </a>
   </div>
@@ -215,12 +227,13 @@
       <div class="modal-title-sub" id="modal-title-sub"></div>
       <div class="modal-meta" id="modal-meta"></div>
       <div class="modal-desc" id="modal-desc"></div>
+      <a class="view-detail-btn" id="modal-detail-btn" href="#" target="_blank">View Detail &#8599;</a>
     </div>
   </div>
   <button class="modal-close" id="modal-close">ESC</button>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
   var SID = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   var URL = 'https://docs.google.com/spreadsheets/d/'+SID+'/export?format=csv&gid=996701484';
@@ -321,6 +334,7 @@
     document.getElementById('modal-meta').innerHTML=rows
       .map(function(r){return '<span class="meta-label">'+esc(r[0])+'</span><span class="meta-value">'+esc(r[1])+'</span>';})
       .join('');
+    document.getElementById('modal-detail-btn').href='book.html?id='+encodeURIComponent(b.id);
     document.getElementById('modal').classList.add('open');
     document.body.style.overflow='hidden';
   }
@@ -374,11 +388,4 @@
     cModal.addEventListener('click', function(e){
       if(e.target === cModal) cModal.classList.remove('open');
     });
-    document.addEventListener('keydown', function(e){
-      if(e.key==='Escape') cModal.classList.remove('open');
-    });
-  }
-})();
-</script>
-</body>
-</html>
+    documen
