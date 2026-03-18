@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Funnel+Sans:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #ffffff; --ink: #111111; --mid: #555555; --faint: #aaaaaa; --rule: #e0e0e0; }
+    :root { --bg: #000000; --ink: #ffffff; --mid: #888888; --faint: #555555; --rule: #333333; }
     html { font-size: 15px; }
     body { background: var(--bg); color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
@@ -104,7 +104,7 @@
       align-self: flex-start;
       margin-top: 3rem;
     }
-    .submit-btn:hover { background: var(--bg); color: var(--ink); }
+    .submit-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
 
     /* CONTACT MODAL */
     .contact-modal-backdrop {
@@ -142,11 +142,11 @@
     .contact-modal-row:hover .contact-modal-arrow { color: var(--bg); }
 
     /* FOOTER */
-    footer { background: var(--ink); color: var(--bg); padding: 2.5rem 2rem; text-align: center; font-size: 0.82rem; line-height: 2; letter-spacing: 0.03em; }
+    footer { background: #111111; color: var(--ink); padding: 2.5rem 2rem; text-align: center; font-size: 0.82rem; line-height: 2; letter-spacing: 0.03em; }
     footer strong { display: block; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
-    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
     footer a:hover { color: #fff; }
-    footer .footer-meta { color: rgba(255,255,255,0.5); }
+    footer .footer-meta { color: var(--faint); }
 
     /* 반응형 */
     @media (max-width: 700px) {
@@ -188,7 +188,7 @@
     <a class="contact-modal-row" href="https://naver.me/GoDhhbsS" target="_blank">
       Naver Map <span class="contact-modal-arrow">&#8599;</span>
     </a>
-    <a class="contact-modal-row" href="mailto:aabb&#64;aabb.kr">
+    <a class="contact-modal-row" href="/cdn-cgi/l/email-protection#5637373434707560626d37373434783d24">
       aabb&#64;aabb.kr <span class="contact-modal-arrow">&#8599;</span>
     </a>
   </div>
@@ -201,7 +201,7 @@
   Instagram&#160;&#160;<a href="https://instagram.com/aabb.os.library" target="_blank">&#64;aabb.os.library</a>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
   var SID = '1hNgNNsGC0hVxicmm_B5QUksjlicXtD8eAFIl3VIAScg';
   var GID = '78065457'; // ← About 시트 gid로 교체
@@ -302,11 +302,4 @@
     cModal.addEventListener('click', function(e){
       if(e.target === cModal) cModal.classList.remove('open');
     });
-    document.addEventListener('keydown', function(e){
-      if(e.key==='Escape') cModal.classList.remove('open');
-    });
-  }
-})();
-</script>
-</body>
-</html>
+    documen
