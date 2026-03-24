@@ -4,336 +4,191 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AABB</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --off-white: #f2f0eb;
-      --black: #0a0a0a;
-      --dim: rgba(255,255,255,0.45);
+      --white: #f7f6f3;
+      --black: #0e0e0e;
+      --mid: #a0a09a;
     }
 
     html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: var(--black);
-      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+      height: 100%;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── SLIDESHOW ── */
-    .slideshow {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: scale(1.04);
-      transition: opacity 1.4s ease, transform 6s ease;
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    /* gradient vignette */
-    .slide::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,0.52) 0%, transparent 35%),
-        linear-gradient(to top,    rgba(0,0,0,0.52) 0%, transparent 35%);
-    }
-
-    /* ── CLICK ZONES ── */
-    .zone {
-      position: fixed;
-      top: 0; height: 100%;
-      width: 50%;
-      z-index: 5;
-    }
-    .zone-prev { left: 0;  cursor: w-resize; }
-    .zone-next { right: 0; cursor: e-resize; }
-
-    /* ── FIXED UI ── */
-    .ui {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      pointer-events: none;
+    .page {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      padding: 32px 40px;
+      background: var(--white);
+      transition: background 0.5s ease;
     }
 
-    /* ── TOP BAR ── */
-    .top {
+    .page.inverted { background: var(--black); }
+
+    /* ── HEADER ── */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 36px 44px;
     }
 
     .logo {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--off-white);
-      opacity: 0;
-      animation: fadeIn 1s 0.2s forwards;
-    }
-
-    .address {
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.04em;
-      color: var(--dim);
-      text-align: right;
-      line-height: 1.8;
-      opacity: 0;
-      animation: fadeIn 1s 0.4s forwards;
-    }
-
-    /* ── MAIN TEXT ── */
-    .main {
-      padding: 0 44px 0 44px;
-      opacity: 0;
-      animation: slideUp 1.1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .headline {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: clamp(52px, 7.5vw, 120px);
-      font-weight: 400;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      color: var(--off-white);
-      max-width: 900px;
-    }
-
-    .sub {
-      display: block;
-      margin-top: 20px;
       font-size: 13px;
-      font-weight: 300;
-      letter-spacing: 0.12em;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--black);
+      transition: color 0.5s ease;
     }
 
-    /* ── BOTTOM BAR ── */
-    .bottom {
+    .header-address {
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      color: var(--black);
+      text-align: right;
+      line-height: 1.7;
+      transition: color 0.5s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .header-address:hover { opacity: 0.6; }
+
+    .page.inverted .logo,
+    .page.inverted .header-address { color: var(--white); }
+
+    /* ── CENTER ── */
+    .center {
+      flex: 1;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: 36px 44px;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
     }
 
-    .links {
-      display: flex;
-      gap: 36px;
-      pointer-events: auto;
+    .hero-text {
+      cursor: default;
+      text-align: center;
+    }
+
+    .hero-line {
+      display: block;
+      font-size: clamp(36px, 6vw, 88px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
       opacity: 0;
-      animation: fadeIn 1s 0.8s forwards;
+      transform: translateY(24px);
+      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: color 0.5s ease;
     }
 
-    .link-item {
+    .hero-line:nth-child(1) { animation-delay: 0.1s; }
+    .hero-line:nth-child(2) { animation-delay: 0.22s; }
+    .hero-line:nth-child(3) { animation-delay: 0.34s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page.inverted .hero-line { color: var(--white); }
+
+    /* ── FOOTER ── */
+    .footer {
+      display: flex;
+      justify-content: flex-start;
+      gap: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .meta-item {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
       gap: 4px;
     }
 
-    .link-label {
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: 0.16em;
+    .meta-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--mid);
+      transition: color 0.5s ease;
     }
 
-    .link-value {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--off-white);
+    .meta-value {
+      font-size: 13px;
+      color: var(--black);
+      transition: color 0.5s ease;
     }
 
-    .link-value a {
+    .meta-value a {
       color: inherit;
       text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.25);
-      padding-bottom: 2px;
-      transition: border-color 0.2s, opacity 0.2s;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
     }
-    .link-value a:hover {
-      border-color: var(--off-white);
-      opacity: 0.7;
-    }
+    .meta-value a:hover { opacity: 0.5; }
 
-    /* counter + progress */
-    .right-bottom {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      opacity: 0;
-      animation: fadeIn 1s 0.9s forwards;
-    }
+    .page.inverted .meta-label { color: rgba(255,255,255,0.4); }
+    .page.inverted .meta-value { color: var(--white); }
 
-    .counter {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      color: var(--dim);
-    }
-
-    .progress-bar {
-      width: 80px;
-      height: 1px;
-      background: rgba(255,255,255,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      position: absolute;
-      left: 0; top: 0;
-      height: 100%;
-      background: var(--off-white);
-      transition: width 0.4s ease;
-    }
-
-    /* ── KEYFRAMES ── */
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── MOBILE ── */
     @media (max-width: 600px) {
-      .top, .bottom { padding: 24px; }
-      .main { padding: 0 24px; }
-      .address { display: none; }
-      .headline { font-size: clamp(40px, 11vw, 72px); }
+      .page { padding: 24px; }
+      .header-address { display: none; }
     }
   </style>
 </head>
 <body>
+  <div class="page" id="page">
 
-  <div class="slideshow" id="slideshow"></div>
-
-  <div class="zone zone-prev" id="zonePrev"></div>
-  <div class="zone zone-next" id="zoneNext"></div>
-
-  <div class="ui">
-    <div class="top">
-      <div class="logo">AABB</div>
-      <div class="address">
+    <header class="header">
+      <span class="logo" id="logo" style="cursor:pointer">AABB</span>
+      <a href="https://maps.app.goo.gl/qo7UGe83bZtogk3M6" target="_blank" class="header-address">
         5F, 10, Wausanro21gil, Mapogu<br>
         Seoul, KR 05544
+      </a>
+    </header>
+
+    <div class="center">
+      <div class="hero-text" id="heroText">
+        <span class="hero-line">Our website is</span>
+        <span class="hero-line">now under construction.</span>
+        <span class="hero-line">See you in May.</span>
       </div>
     </div>
 
-    <div class="main">
-      <h1 class="headline">
-        Our website is<br>
-        now under<br>
-        construction.
-      </h1>
-      <span class="sub">See you in May</span>
-    </div>
+    <footer class="footer">
+      <div class="meta-item">
+        <span class="meta-label">Instagram</span>
+        <span class="meta-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Email</span>
+        <span class="meta-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
+      </div>
+    </footer>
 
-    <div class="bottom">
-      <div class="links">
-        <div class="link-item">
-          <span class="link-label">Instagram</span>
-          <span class="link-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
-        </div>
-        <div class="link-item">
-          <span class="link-label">Email</span>
-          <span class="link-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
-        </div>
-      </div>
-      <div class="right-bottom">
-        <div class="counter" id="counter">01 — 07</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
-    const srcs = [
-      'https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1920',
-      'https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1920',
-      'https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1920',
-      'https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1920',
-      'https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1920',
-      'https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1920',
-      'https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1920',
-    ];
+    const page     = document.getElementById('page');
+    const heroText = document.getElementById('heroText');
+    const logo     = document.getElementById('logo');
 
-    const container    = document.getElementById('slideshow');
-    const counterEl    = document.getElementById('counter');
-    const progressFill = document.getElementById('progressFill');
-    const total        = srcs.length;
-    let current        = 0;
-    let timer;
+    heroText.addEventListener('mouseenter', () => page.classList.add('inverted'));
+    heroText.addEventListener('mouseleave', () => page.classList.remove('inverted'));
 
-    const slides = srcs.map((src, i) => {
-      const el = document.createElement('div');
-      el.className = 'slide' + (i === 0 ? ' active' : '');
-      el.style.backgroundImage = `url('${src}')`;
-      container.appendChild(el);
-      return el;
-    });
-
-    function pad(n) { return String(n + 1).padStart(2, '0'); }
-
-    function goTo(idx) {
-      slides[current].classList.remove('active');
-      current = (idx + total) % total;
-      slides[current].classList.add('active');
-      counterEl.textContent = `${pad(current)} — ${pad(total - 1)}`;
-      progressFill.style.width = `${((current + 1) / total) * 100}%`;
-      resetTimer();
-    }
-
-    function resetTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
-
-    document.getElementById('zoneNext').addEventListener('click', () => goTo(current + 1));
-    document.getElementById('zonePrev').addEventListener('click', () => goTo(current - 1));
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft')  goTo(current - 1);
-      if (e.key === 'ArrowRight') goTo(current + 1);
-    });
-
-    // init
-    progressFill.style.width = `${(1 / total) * 100}%`;
-    resetTimer();
+    logo.addEventListener('click', () => location.reload());
   </script>
-
 </body>
 </html>
