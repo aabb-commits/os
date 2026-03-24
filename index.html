@@ -14,327 +14,240 @@
     }
 
     html, body {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
+      overflow: hidden;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── PAGE ── */
-    .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 32px 40px;
-      background: var(--white);
-      transition: background 0.5s ease;
-    }
-
-    .page.inverted {
       background: var(--black);
     }
 
-    /* ── HEADER ── */
-    .header {
+    /* ── FULLSCREEN SLIDESHOW ── */
+    .slideshow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .slide.active { opacity: 1; }
+
+    /* subtle dark overlay for text legibility */
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+    }
+
+    /* ── FIXED UI ── */
+    .ui {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header row */
+    .ui-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
     }
 
-    .logo {
+    .notice {
       font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--black);
-      transition: color 0.5s ease;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      line-height: 1.4;
+      max-width: 340px;
     }
 
     .header-address {
       font-size: 11px;
       letter-spacing: 0.02em;
-      color: var(--black);
+      color: rgba(255,255,255,0.7);
       text-align: right;
       line-height: 1.7;
-      transition: color 0.5s ease;
     }
 
-    .page.inverted .logo,
-    .page.inverted .header-address {
-      color: var(--white);
-    }
-
-    /* ── CENTER ── */
-    .center {
-      flex: 1;
+    /* Footer row */
+    .ui-footer {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
-      padding: 40px 0;
+      justify-content: space-between;
+      align-items: flex-end;
     }
 
-    /* Tight hover wrapper */
-    .hover-zone {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 48px;
-    }
-
-    /* Hero text click zones */
-    .hero-text {
-      cursor: default;
-      text-align: center;
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero-half {
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      z-index: 5;
-      cursor: w-resize;
-    }
-    .hero-half-left  { left: 0; cursor: w-resize; }
-    .hero-half-right { right: 0; cursor: e-resize; }
-
-    .hero-line {
-      display: block;
-      font-size: clamp(36px, 6vw, 88px);
-      font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      color: var(--black);
-      opacity: 0;
-      transform: translateY(24px);
-      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      transition: color 0.5s ease;
-    }
-
-    .hero-line:nth-child(1) { animation-delay: 0.1s; }
-    .hero-line:nth-child(2) { animation-delay: 0.22s; }
-    .hero-line:nth-child(3) { animation-delay: 0.34s; }
-
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .page.inverted .hero-line { color: var(--white); }
-
-    /* ── IMAGE SLIDER BOX ── */
-    .slider-wrap {
-      width: 560px;
-      max-width: 90vw;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
-      position: relative;
-    }
-
-    .slider-wrap.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .slider-box {
-      width: 100%;
-      aspect-ratio: 4/3;
-      overflow: hidden;
-      position: relative;
-      background: #111;
-      cursor: pointer;
-    }
-
-    .slides {
+    .footer-left {
       display: flex;
-      height: 100%;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .slide {
-      flex: 0 0 100%;
-      height: 100%;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      pointer-events: none;
-    }
-
-    /* Left / right click zones on image */
-    .click-prev, .click-next {
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      z-index: 10;
-      cursor: w-resize;
-    }
-    .click-prev { left: 0; cursor: w-resize; }
-    .click-next { right: 0; cursor: e-resize; }
-
-    .slider-dots { display: none; }
-
-    /* ── FOOTER ── */
-    .footer {
-      display: flex;
-      justify-content: flex-start;
       gap: 32px;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: auto;
     }
 
     .meta-item {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
+      gap: 3px;
     }
 
     .meta-label {
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--mid);
-      transition: color 0.5s ease;
+      color: rgba(255,255,255,0.45);
     }
 
     .meta-value {
-      font-size: 13px;
-      color: var(--black);
-      transition: color 0.5s ease;
+      font-size: 12px;
+      color: var(--white);
     }
 
     .meta-value a {
       color: inherit;
       text-decoration: none;
-      border-bottom: 1px solid currentColor;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
       padding-bottom: 1px;
       transition: opacity 0.2s;
     }
-    .meta-value a:hover { opacity: 0.5; }
+    .meta-value a:hover { opacity: 0.6; }
 
-    .page.inverted .meta-label { color: rgba(255,255,255,0.4); }
-    .page.inverted .meta-value { color: var(--white); }
+    /* Counter */
+    .counter {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.45);
+    }
 
-    /* ── MOBILE ── */
+    /* Click zones — left half prev, right half next */
+    .click-prev, .click-next {
+      position: fixed;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      z-index: 5;
+      cursor: w-resize;
+    }
+    .click-prev { left: 0; cursor: w-resize; }
+    .click-next { right: 0; cursor: e-resize; }
+
+    /* Fade in on load */
+    .ui { opacity: 0; animation: fadeIn 1s 0.3s forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Mobile */
     @media (max-width: 600px) {
-      .page { padding: 24px; }
+      .ui { padding: 24px; }
       .header-address { display: none; }
-      .slider-wrap { width: 100%; }
+      .notice { font-size: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="page" id="page">
+  <!-- SLIDESHOW -->
+  <div class="slideshow" id="slideshow"></div>
 
-    <header class="header">
-      <span class="logo">AABB</span>
+  <!-- CLICK ZONES -->
+  <div class="click-prev" id="clickPrev"></div>
+  <div class="click-next" id="clickNext"></div>
+
+  <!-- FIXED UI -->
+  <div class="ui">
+    <div class="ui-header">
+      <div class="notice">
+        Our website is now under construction.<br>
+        See you in May.
+      </div>
       <div class="header-address">
         5F, 10, Wausanro21gil, Mapogu<br>
         Seoul, KR 05544
       </div>
-    </header>
-
-    <div class="center">
-      <div class="hover-zone" id="hoverZone">
-
-        <div class="hero-text" id="heroText">
-          <div class="hero-half hero-half-left" id="textPrev"></div>
-          <div class="hero-half hero-half-right" id="textNext"></div>
-          <span class="hero-line">Our website is</span>
-          <span class="hero-line">now under construction.</span>
-          <span class="hero-line">See you in May.</span>
-        </div>
-
-        <div class="slider-wrap" id="sliderWrap">
-          <div class="slider-box">
-            <div class="slides" id="slides">
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1200" alt=""></div>
-              <div class="slide"><img src="https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1200" alt=""></div>
-            </div>
-            <div class="click-prev" id="imgPrev"></div>
-            <div class="click-next" id="imgNext"></div>
-          </div>
-          <div class="slider-dots" id="sliderDots"></div>
-        </div>
-
-      </div>
     </div>
 
-    <footer class="footer">
-      <div class="meta-item">
-        <span class="meta-label">Instagram</span>
-        <span class="meta-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
+    <div class="ui-footer">
+      <div class="footer-left">
+        <div class="meta-item">
+          <span class="meta-label">Instagram</span>
+          <span class="meta-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Email</span>
+          <span class="meta-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
+        </div>
       </div>
-      <div class="meta-item">
-        <span class="meta-label">Email</span>
-        <span class="meta-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
-      </div>
-    </footer>
-
+      <div class="counter" id="counter">1 / 7</div>
+    </div>
   </div>
 
   <script>
-    const page       = document.getElementById('page');
-    const heroText   = document.getElementById('heroText');
-    const sliderWrap = document.getElementById('sliderWrap');
-    const slidesEl   = document.getElementById('slides');
-    const dotsEl     = document.getElementById('sliderDots');
-    const center     = document.querySelector('.center');
-    const total      = 7;
-    let current      = 0;
+    // ── IMAGE SOURCES ──
+    // 이미지를 /images/ 폴더에 올린 후 파일명만 바꾸면 됩니다.
+    // 현재는 구글 드라이브 thumbnail URL 사용 (서버 업로드 시 교체)
+    const images = [
+      'https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1920',
+      'https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1920',
+      'https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1920',
+      'https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1920',
+      'https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1920',
+      'https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1920',
+      'https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1920',
+    ];
 
-    // Build dots (hidden but kept for goTo logic)
-    for (let i = 0; i < total; i++) {
-      const d = document.createElement('div');
-      d.className = 'sdot' + (i === 0 ? ' active' : '');
-      d.addEventListener('click', () => goTo(i));
-      dotsEl.appendChild(d);
-    }
-    const dots = document.querySelectorAll('.sdot');
+    const slideshow = document.getElementById('slideshow');
+    const counter   = document.getElementById('counter');
+    const total     = images.length;
+    let current     = 0;
+    let timer;
+
+    // Build slides
+    const slides = images.map((src, i) => {
+      const el = document.createElement('div');
+      el.className = 'slide' + (i === 0 ? ' active' : '');
+      el.style.backgroundImage = `url('${src}')`;
+      slideshow.appendChild(el);
+      return el;
+    });
 
     function goTo(idx) {
+      slides[current].classList.remove('active');
       current = (idx + total) % total;
-      slidesEl.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      slides[current].classList.add('active');
+      counter.textContent = `${current + 1} / ${total}`;
+      resetTimer();
     }
 
-    document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
-    document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
 
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(next, 4000);
+    }
+
+    // Click zones
+    document.getElementById('clickNext').addEventListener('click', next);
+    document.getElementById('clickPrev').addEventListener('click', prev);
+
+    // Keyboard
     document.addEventListener('keydown', (e) => {
-      if (!page.classList.contains('inverted')) return;
-      if (e.key === 'ArrowLeft') goTo(current - 1);
-      if (e.key === 'ArrowRight') goTo(current + 1);
+      if (e.key === 'ArrowLeft')  prev();
+      if (e.key === 'ArrowRight') next();
     });
 
-    // Hover on the whole center zone (text + slider)
-    center.addEventListener('mouseenter', () => {
-      page.classList.add('inverted');
-      sliderWrap.classList.add('visible');
-    });
-
-    center.addEventListener('mouseleave', () => {
-      page.classList.remove('inverted');
-      sliderWrap.classList.remove('visible');
-    });
+    // Auto-advance
+    resetTimer();
   </script>
 
 </body>
