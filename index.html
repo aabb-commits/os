@@ -15,21 +15,10 @@
 
     html, body {
       width: 100%;
-      height: 100%;
       background: var(--white);
       color: var(--black);
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── LAYOUT ── */
-    .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 32px 40px;
-      transition: background 0.5s ease;
     }
 
     /* ── HEADER ── */
@@ -37,7 +26,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      transition: color 0.5s ease;
+      padding: 32px 40px;
     }
 
     .logo {
@@ -46,7 +35,6 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--black);
-      transition: color 0.5s ease;
     }
 
     .header-address {
@@ -55,16 +43,16 @@
       color: var(--black);
       text-align: right;
       line-height: 1.7;
-      transition: color 0.5s ease;
     }
 
-    /* ── CENTER TEXT ── */
-    .center {
-      flex: 1;
+    /* ── HERO ── */
+    .hero {
+      min-height: 60vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 0;
+      padding: 40px;
+      transition: background 0.5s ease;
     }
 
     .hero-text {
@@ -95,18 +83,56 @@
 
     /* hover invert */
     .hero-text:hover .hero-line { color: var(--white); }
-    .page:has(.hero-text:hover) { background: var(--black); }
-    .page:has(.hero-text:hover) .logo { color: var(--white); }
-    .page:has(.hero-text:hover) .header-address { color: var(--white); }
-    .page:has(.hero-text:hover) .meta-label { color: rgba(255,255,255,0.4); }
-    .page:has(.hero-text:hover) .meta-value { color: var(--white); }
-    .page:has(.hero-text:hover) .meta-value a { color: var(--white); border-bottom-color: var(--white); }
+    .hero:has(.hero-text:hover) { background: var(--black); }
+
+    /* ── IMAGE GRID ── */
+    .grid-section {
+      padding: 0 40px 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 8px;
+    }
+
+    .cell {
+      overflow: hidden;
+      background: #e2e1dd;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .cell.visible { opacity: 1; transform: translateY(0); }
+
+    .cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .cell:hover img { transform: scale(1.03); }
+
+    /* Grid sizing — 7 images, asymmetric rhythm */
+    .cell-1 { grid-column: span 5; aspect-ratio: 4/3; }
+    .cell-2 { grid-column: span 7; aspect-ratio: 16/9; }
+    .cell-3 { grid-column: span 4; aspect-ratio: 1; }
+    .cell-4 { grid-column: span 4; aspect-ratio: 1; }
+    .cell-5 { grid-column: span 4; aspect-ratio: 1; }
+    .cell-6 { grid-column: span 7; aspect-ratio: 3/2; }
+    .cell-7 { grid-column: span 5; aspect-ratio: 4/3; }
 
     /* ── FOOTER ── */
     .footer {
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
       gap: 32px;
+      padding: 32px 40px;
+      border-top: 1px solid rgba(0,0,0,0.1);
       opacity: 0;
       animation: fadeUp 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -114,7 +140,7 @@
     .meta-item {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
+      align-items: flex-start;
       gap: 4px;
     }
 
@@ -123,13 +149,11 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--mid);
-      transition: color 0.5s ease;
     }
 
     .meta-value {
       font-size: 13px;
       color: var(--black);
-      transition: color 0.5s ease;
     }
 
     .meta-value a {
@@ -142,50 +166,78 @@
     .meta-value a:hover { opacity: 0.5; }
 
     /* ── MOBILE ── */
-    @media (max-width: 600px) {
-      .page { padding: 24px; }
-
+    @media (max-width: 640px) {
+      .header { padding: 24px; }
       .header-address { display: none; }
-
-      .footer {
-        justify-content: flex-start;
-        gap: 24px;
-      }
-
-      .meta-item { align-items: flex-start; }
+      .hero { padding: 24px; min-height: 50vh; }
+      .grid-section { padding: 0 12px 24px; }
+      .grid { gap: 6px; }
+      .cell-1 { grid-column: span 12; }
+      .cell-2 { grid-column: span 12; }
+      .cell-3 { grid-column: span 6; }
+      .cell-4 { grid-column: span 6; }
+      .cell-5 { grid-column: span 12; }
+      .cell-6 { grid-column: span 12; }
+      .cell-7 { grid-column: span 12; }
+      .footer { padding: 24px; gap: 20px; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
 
-    <header class="header">
-      <span class="logo">AABB</span>
-      <div class="header-address">
-        5F, 10, Wausanro21gil, Mapogu<br>
-        Seoul, KR 05544
-      </div>
-    </header>
-
-    <div class="center">
-      <div class="hero-text">
-        <span class="hero-line">Our website is</span>
-        <span class="hero-line">now under construction.</span>
-        <span class="hero-line">See you in May.</span>
-      </div>
+  <header class="header">
+    <span class="logo">AABB</span>
+    <div class="header-address">
+      5F, 10, Wausanro21gil, Mapogu<br>
+      Seoul, KR 05544
     </div>
+  </header>
 
-    <footer class="footer">
-      <div class="meta-item">
-        <span class="meta-label">Instagram</span>
-        <span class="meta-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Email</span>
-        <span class="meta-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
-      </div>
-    </footer>
+  <section class="hero">
+    <div class="hero-text">
+      <span class="hero-line">Our website is</span>
+      <span class="hero-line">now under construction.</span>
+      <span class="hero-line">See you in May.</span>
+    </div>
+  </section>
 
-  </div>
+  <section class="grid-section">
+    <div class="grid">
+      <div class="cell cell-1"><img src="https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-2"><img src="https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-3"><img src="https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-4"><img src="https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-5"><img src="https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-6"><img src="https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+      <div class="cell cell-7"><img src="https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1200" alt="" loading="lazy" onerror="this.parentElement.style.background='#d8d7d3'"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="meta-item">
+      <span class="meta-label">Instagram</span>
+      <span class="meta-value"><a href="https://instagram.com/aabb.inc" target="_blank">@aabb.inc</a></span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Email</span>
+      <span class="meta-value"><a href="mailto:aabb@aabb.kr">aabb@aabb.kr</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll fade-in for grid cells
+    const cells = document.querySelectorAll('.cell');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(cells).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    cells.forEach(c => observer.observe(c));
+  </script>
+
 </body>
 </html>
