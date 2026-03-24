@@ -76,11 +76,32 @@
       padding: 40px 0;
     }
 
-    /* ── HERO TEXT ── */
+    /* Tight hover wrapper */
+    .hover-zone {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    /* Hero text click zones */
     .hero-text {
       cursor: default;
       text-align: center;
+      position: relative;
+      display: inline-block;
     }
+
+    .hero-half {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 5;
+      cursor: w-resize;
+    }
+    .hero-half-left  { left: 0; cursor: w-resize; }
+    .hero-half-right { right: 0; cursor: e-resize; }
 
     .hero-line {
       display: block;
@@ -128,6 +149,7 @@
       overflow: hidden;
       position: relative;
       background: #111;
+      cursor: pointer;
     }
 
     .slides {
@@ -146,27 +168,20 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      pointer-events: none;
     }
 
-    /* Arrow buttons */
-    .arrow {
+    /* Left / right click zones on image */
+    .click-prev, .click-next {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 12px;
+      top: 0;
+      width: 50%;
+      height: 100%;
       z-index: 10;
-      color: rgba(255,255,255,0.7);
-      font-size: 18px;
-      transition: color 0.2s;
-      line-height: 1;
+      cursor: w-resize;
     }
-
-    .arrow:hover { color: #fff; }
-    .arrow-prev { left: 8px; }
-    .arrow-next { right: 8px; }
+    .click-prev { left: 0; cursor: w-resize; }
+    .click-next { right: 0; cursor: e-resize; }
 
     .slider-dots { display: none; }
 
@@ -233,30 +248,34 @@
     </header>
 
     <div class="center">
+      <div class="hover-zone" id="hoverZone">
 
-      <div class="hero-text" id="heroText">
-        <span class="hero-line">Our website is</span>
-        <span class="hero-line">now under construction.</span>
-        <span class="hero-line">See you in May.</span>
-      </div>
-
-      <div class="slider-wrap" id="sliderWrap">
-        <div class="slider-box">
-          <div class="slides" id="slides">
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1200" alt=""></div>
-            <div class="slide"><img src="https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1200" alt=""></div>
-          </div>
-          <button class="arrow arrow-prev" id="prev">&#8592;</button>
-          <button class="arrow arrow-next" id="next">&#8594;</button>
+        <div class="hero-text" id="heroText">
+          <div class="hero-half hero-half-left" id="textPrev"></div>
+          <div class="hero-half hero-half-right" id="textNext"></div>
+          <span class="hero-line">Our website is</span>
+          <span class="hero-line">now under construction.</span>
+          <span class="hero-line">See you in May.</span>
         </div>
-        <div class="slider-dots" id="sliderDots"></div>
-      </div>
 
+        <div class="slider-wrap" id="sliderWrap">
+          <div class="slider-box">
+            <div class="slides" id="slides">
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=12n_S7KdXddqOY2Iy7Xt7XpEd-Bgnh1aF&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1qy-uFJqQFVnFFzPA6WHaSvPn5rdyXUjM&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1GUF68NgqS5a8ufg6P0Re4xFXJYrFyRSi&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=11JlNaHtGw9WVg92b1pvoqIBvKB9mbsSw&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nljVHHXPw1AhYK2bkqqyD_O362d-w9V1&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=1nQk5bLKtc0Rh3sBKXxIFRDlxOUqq4OJU&sz=w1200" alt=""></div>
+              <div class="slide"><img src="https://drive.google.com/thumbnail?id=17yjATAQu_Atjaf-eKDUCdVHkSVPVOfad&sz=w1200" alt=""></div>
+            </div>
+            <div class="click-prev" id="imgPrev"></div>
+            <div class="click-next" id="imgNext"></div>
+          </div>
+          <div class="slider-dots" id="sliderDots"></div>
+        </div>
+
+      </div>
     </div>
 
     <footer class="footer">
