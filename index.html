@@ -168,27 +168,7 @@
     .arrow-prev { left: 8px; }
     .arrow-next { right: 8px; }
 
-    /* Dots */
-    .slider-dots {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 12px;
-    }
-
-    .sdot {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
-    }
-
-    .sdot.active {
-      background: var(--white);
-      transform: scale(1.5);
-    }
+    .slider-dots { display: none; }
 
     /* ── FOOTER ── */
     .footer {
@@ -298,11 +278,11 @@
     const sliderWrap = document.getElementById('sliderWrap');
     const slidesEl   = document.getElementById('slides');
     const dotsEl     = document.getElementById('sliderDots');
+    const center     = document.querySelector('.center');
     const total      = 7;
     let current      = 0;
-    let hovered      = false;
 
-    // Build dots
+    // Build dots (hidden but kept for goTo logic)
     for (let i = 0; i < total; i++) {
       const d = document.createElement('div');
       d.className = 'sdot' + (i === 0 ? ' active' : '');
@@ -320,36 +300,22 @@
     document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
     document.getElementById('next').addEventListener('click', () => goTo(current + 1));
 
-    // Keyboard left/right when hovered
     document.addEventListener('keydown', (e) => {
-      if (!hovered) return;
+      if (!page.classList.contains('inverted')) return;
       if (e.key === 'ArrowLeft') goTo(current - 1);
       if (e.key === 'ArrowRight') goTo(current + 1);
     });
 
-    // Hover: invert + show slider
-    heroText.addEventListener('mouseenter', () => {
-      hovered = true;
+    // Hover on the whole center zone (text + slider)
+    center.addEventListener('mouseenter', () => {
       page.classList.add('inverted');
       sliderWrap.classList.add('visible');
     });
 
-    heroText.addEventListener('mouseleave', (e) => {
-      // keep open if cursor moves to slider
-      if (sliderWrap.contains(e.relatedTarget)) return;
-      hide();
-    });
-
-    sliderWrap.addEventListener('mouseleave', (e) => {
-      if (heroText.contains(e.relatedTarget)) return;
-      hide();
-    });
-
-    function hide() {
-      hovered = false;
+    center.addEventListener('mouseleave', () => {
       page.classList.remove('inverted');
       sliderWrap.classList.remove('visible');
-    }
+    });
   </script>
 
 </body>
